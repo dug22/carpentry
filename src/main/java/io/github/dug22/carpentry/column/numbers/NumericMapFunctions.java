@@ -80,6 +80,16 @@ public interface NumericMapFunctions<T extends Number> {
     }
 
     /**
+     * Adds the values of this column and other multiple columns.
+     *
+     * @param others the columns to add
+     * @return a new column with the sum of values
+     */
+    default NumberColumn plus(List<NumericColumn<T>> others) {
+        return performOperation(others, Double::sum, '+');
+    }
+
+    /**
      * Subtracts the values of this column and another column.
      *
      * @param other the column to subtract
@@ -87,6 +97,16 @@ public interface NumericMapFunctions<T extends Number> {
      */
     default NumberColumn minus(NumericColumn<T> other) {
         return performOperation(other, (a, b) -> a - b, '-');
+    }
+
+    /**
+     * Subtracts the values of this column and other multiple columns.
+     *
+     * @param others the columns to subtract
+     * @return a new column with the difference of values
+     */
+    default NumberColumn minus(List<NumericColumn<T>> others){
+        return performOperation(others, (a, b) -> a-b, '-');
     }
 
     /**
@@ -100,6 +120,16 @@ public interface NumericMapFunctions<T extends Number> {
     }
 
     /**
+     * Multiplies the values of this column and other multiple columns.
+     *
+     * @param others the columns to multiply
+     * @return a new column with the product of values
+     */
+    default NumberColumn times(List<NumericColumn<T>> others){
+        return performOperation(others, (a, b) -> a * b, '*');
+    }
+
+    /**
      * Divides the values of this column by another column.
      *
      * @param other the column to divide by
@@ -107,6 +137,16 @@ public interface NumericMapFunctions<T extends Number> {
      */
     default NumberColumn divide(NumericColumn<T> other) {
         return performOperation(other, (a, b) -> a / b, '/');
+    }
+
+    /**
+     * Divides the values of this column and other multiple columns.
+     *
+     * @param others the columns to divide by
+     * @return a new column with the quotient of values
+     */
+    default NumberColumn divide(List<NumericColumn<T>> others){
+        return performOperation(others, (a, b) -> a / b, '/');
     }
 
     /**
@@ -195,8 +235,8 @@ public interface NumericMapFunctions<T extends Number> {
     /**
      * Helper method to perform an arithmetic operation between two numeric columns.
      *
-     * @param other the column to perform the operation with
-     * @param operation the arithmetic operation to apply (e.g., sum, subtraction, etc.)
+     * @param other           the column to perform the operation with
+     * @param operation       the arithmetic operation to apply (e.g., sum, subtraction, etc.)
      * @param operationSymbol the symbol representing the operation (e.g., '+', '-', etc.)
      * @return a new column with the result of applying the operation between the two columns
      */
@@ -217,6 +257,30 @@ public interface NumericMapFunctions<T extends Number> {
 
         Number[] resultValues = numbersList.toArray(new Number[0]);
         String resultColumnName = getColumnName() + " " + operationSymbol + " " + other.getColumnName();
+        return NumberColumn.create(resultColumnName, resultValues);
+    }
+
+    private NumberColumn performOperation(List<NumericColumn<T>> others, BiFunction<Double, Double, Double> operation, char operationSymbol) {
+        if (this.size() != others.getFirst().size()) {
+            throw new IllegalArgumentException("Columns must have the same size.");
+        }
+
+        List<Number> numbersList = new ArrayList<>();
+        for (int i = 0; i < size(); i++) {
+            Double result = get(i).doubleValue();
+            for (NumericColumn<T> other : others) {
+                if (isNA(get(i)) || isNA(other.get(i))) {
+                    result = Double.NaN;
+                    continue;
+                }
+                result = operation.apply(result, other.get(i).doubleValue());
+            }
+
+            numbersList.add(NumberUtil.convert(result, getColumnType()));
+        }
+
+        Number[] resultValues = numbersList.toArray(new Number[0]);
+        String resultColumnName = getColumnName() + " " + operationSymbol + " " + String.join(" + ", others.stream().map(NumericColumn::getColumnName).toArray(String[]::new));
         return NumberColumn.create(resultColumnName, resultValues);
     }
 }

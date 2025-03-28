@@ -189,12 +189,21 @@ public class QueryParser {
      * @return The parsed value as an Object (either Integer, Double, or String).
      */
     private Object parseValue(String value) {
+        if (value.equalsIgnoreCase("true") || value.equalsIgnoreCase("false")) {
+            return Boolean.parseBoolean(value);
+        }
+
+        if (value.length() == 1) {
+            return value.charAt(0);
+        }
+
         try {
             return value.contains(".") ? Double.parseDouble(value) : Integer.parseInt(value);
         } catch (NumberFormatException ignored) {
             return value;
         }
     }
+
 
     /**
      * Checks if the current position has reached the end of the token list.

@@ -76,7 +76,7 @@ public class DataFrameGroupingTest {
 
     @Test
     public void groupByUnsortedTest() {
-        DefaultDataFrame result = dataFrame.groupByUnsorted(List.of("species", "sex"));
+        DefaultDataFrame result = dataFrame.groupBy(List.of("species", "sex"));
         String[] expectedColumns = new String[]{"species",  "sex", "island", "bill_length_mm","bill_depth_mm", "flipper_length_mm","body_mass_g","year"};
         for(int i = 0; i < expectedColumns.length; i++){
             assertEquals(i, result.getIndexOfColumn(expectedColumns[i]));
