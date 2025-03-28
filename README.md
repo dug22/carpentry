@@ -34,6 +34,7 @@ You can use the dependency by copying this into your pom.xml file
 ~~~
 
 ### Documentation:
+- API Documentation: https://www.javadoc.io/doc/io.github.dug22/carpentry/latest/index.html 
 - UserGuide: currently in the works
 - Test Examples: https://github.com/dug22/carpentry/tree/master/src/test
 
