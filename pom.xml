@@ -81,12 +81,7 @@
     </properties>
 
     <name>carpentry</name>
-    <description>
-        Carpentry is a Java-based dataframe tool, drawing an analogy to shaping wood into useful objects. It provides
-        features for building data structures in a way that suits your needs.
-        Carpentry provides functionalities for data loading, exporting, cleaning, transformation, filtering, and
-        summarization.
-    </description>
+    <description>A Java-based DataFrame library</description>
     <url>https://github.com/dug22/carpentry</url>
 
     <licenses>

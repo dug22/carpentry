@@ -54,7 +54,7 @@ public class EmployeeSalesExample extends AbstractExample {
         df.shape();
         out("Now, let's display the first 5 rows.");
         df.head();
-        out("Next, we'll calculate the totalSales sales for each employee by summing their sales across all months.");
+        out("Next, we'll calculate the totalSales for each employee by summing their sales across all months.");
         DoubleColumn totalSales = df.getIntegerColumn("January").plus(List.of(
                 df.getIntegerColumn("February"),
                 df.getIntegerColumn("March"),

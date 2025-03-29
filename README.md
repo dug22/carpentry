@@ -6,9 +6,8 @@ Carpentry
 
 ### Overview
 
-**Carpentry** is a Java-based dataframe tool, drawing an analogy to shaping wood into useful objects. It provides
-features for building data structures in a way that suits your needs. Carpentry provides functionalities for data
-loading, exporting, cleaning, transformation, filtering, and summarization.
+Just like a carpenter shapes wood into useful material, Carpentry is a Java-based DataFrame library that lets you efficiently shape and manipulate data to fit your needs.
+It supports tasks like loading, exporting, cleaning, transforming, filtering, and summarizing data.
 
 ### What does Carpentry offer?
 
