@@ -75,7 +75,7 @@ public class JSONWriter extends SourceWriter {
 
     @Override
     public void write() {
-        if (endsWithExtension()) {
+        if (!endsWithExtension()) {
             throw new JSONException("The file path must end with '.json'!");
         }
 
@@ -104,6 +104,6 @@ public class JSONWriter extends SourceWriter {
 
     @Override
     protected boolean endsWithExtension() {
-        return !filePath.toLowerCase().endsWith(".json");
+        return filePath.toLowerCase().endsWith(".json");
     }
 }

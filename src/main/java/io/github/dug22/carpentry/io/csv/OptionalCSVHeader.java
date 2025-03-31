@@ -43,7 +43,7 @@
  *
  */
 
-package io.github.dug22.carpentry.io.json;
+package io.github.dug22.carpentry.io.csv;
 
-public record JSONHeader(String headerName, Class<?> headerType) {
+public record OptionalCSVHeader(String headerName, Class<?> headerType) {
 }

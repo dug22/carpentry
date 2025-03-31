@@ -31,8 +31,6 @@
 package io.github.dug22.carpentry.carpentry_test.viewer;
 
 import io.github.dug22.carpentry.DefaultDataFrame;
-import io.github.dug22.carpentry.io.csv.CSVHeader;
-import io.github.dug22.carpentry.io.csv.CSVHeaders;
 import io.github.dug22.carpentry.io.csv.CSVReaderBuilder;
 import io.github.dug22.carpentry.viewer.DataViewer;
 import io.github.dug22.carpentry.viewer.DataViewerBuilder;
@@ -49,13 +47,8 @@ public class DataViewerTest {
     @BeforeEach
     public void setUP() {
         dataFrame = DefaultDataFrame.load(new CSVReaderBuilder()
-                .setURL("https://raw.githubusercontent.com/dug22/datasets/refs/heads/main/states_v1.csv")
-                .setHeaders(
-                        CSVHeaders.of(
-                                new CSVHeader("State", String.class),
-                                new CSVHeader("Code", String.class)
-                        )
-                ).build());
+                .setURL("https://raw.githubusercontent.com/dug22/datasets/refs/heads/main/states.csv")
+                .build());
     }
 
     @Test

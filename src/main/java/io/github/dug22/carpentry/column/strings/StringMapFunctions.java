@@ -56,6 +56,9 @@ public interface StringMapFunctions {
 
     String getColumnName();
 
+    /**
+     * Creates a new StringColumn with each string capitalized (first letter uppercase, rest lowercase).
+     */
     default StringColumn capitalize() {
         StringColumn newStringColumn = StringColumn.create(getColumnName() + " [capitalized]");
         for (int i = 0; i < size(); i++) {
@@ -65,6 +68,9 @@ public interface StringMapFunctions {
         return newStringColumn;
     }
 
+    /**
+     * Creates a new StringColumn with all strings converted to uppercase.
+     */
     default StringColumn upperCase() {
         StringColumn newStringColumn = StringColumn.create(getColumnName() + " [ucase]");
         for (int i = 0; i < size(); i++) {
@@ -74,6 +80,9 @@ public interface StringMapFunctions {
         return newStringColumn;
     }
 
+    /**
+     * Creates a new StringColumn with all strings converted to lowercase.
+     */
     default StringColumn lowerCase() {
         StringColumn newStringColumn = StringColumn.create(getColumnName() + " [lcase]");
         for (int i = 0; i < size(); i++) {
@@ -83,6 +92,9 @@ public interface StringMapFunctions {
         return newStringColumn;
     }
 
+    /**
+     * Creates a new StringColumn with each string repeated a specified number of times.
+     */
     default StringColumn repeat(int times) {
         StringColumn newStringColumn = StringColumn.create(String.format("%s [rep %d]", getColumnName(), times));
         for (int i = 0; i < size(); i++) {
@@ -92,6 +104,9 @@ public interface StringMapFunctions {
         return newStringColumn;
     }
 
+    /**
+     * Creates a new StringColumn with leading and trailing whitespace removed from each string.
+     */
     default StringColumn trim() {
         StringColumn newStringColumn = StringColumn.create(getColumnName() + " [trim]");
         for (int i = 0; i < size(); i++) {
@@ -101,6 +116,9 @@ public interface StringMapFunctions {
         return newStringColumn;
     }
 
+    /**
+     * Creates a new StringColumn by joining this column's strings with others using a separator.
+     */
     default StringColumn join(String separator, AbstractColumn<?>... columns) {
         StringColumn newStringColumn = StringColumn.create(getColumnName() + " [column appended]");
         int size = size();
@@ -116,10 +134,12 @@ public interface StringMapFunctions {
             }
             newStringColumn.append(result.toString());
         }
-
         return newStringColumn;
     }
 
+    /**
+     * Creates a new StringColumn with the first occurrence of a regex pattern replaced in each string.
+     */
     default StringColumn replaceFirst(String reg, String replacement) {
         StringColumn newStringColumn = StringColumn.create(getColumnName() + " [repl]");
         for (int i = 0; i < size(); i++) {
@@ -129,6 +149,9 @@ public interface StringMapFunctions {
         return newStringColumn;
     }
 
+    /**
+     * Creates a new StringColumn with all occurrences of a regex pattern replaced in each string.
+     */
     default StringColumn replaceAll(String reg, String replacement) {
         StringColumn newStringColumn = StringColumn.create(getColumnName() + " [repl]");
         for (int i = 0; i < size(); i++) {
@@ -138,6 +161,9 @@ public interface StringMapFunctions {
         return newStringColumn;
     }
 
+    /**
+     * Creates a new StringColumn with each string truncated to a maximum width, appending '...' if needed.
+     */
     default StringColumn truncate(int maxWidth) {
         final String defaultTruncatedValue = "...";
         StringColumn newStringColumn = StringColumn.create(getColumnName() + " [truncate]");
@@ -154,27 +180,30 @@ public interface StringMapFunctions {
                 newStringColumn.append(value);
             }
         }
-
         return newStringColumn;
     }
 
-    default StringColumn substring(int start){
+    /**
+     * Creates a new StringColumn with each string extracted from a start index to the end.
+     */
+    default StringColumn substring(int start) {
         StringColumn newStringColumn = StringColumn.create(getColumnName() + " [sub]");
-        for(int i = 0; i < size(); i++){
+        for (int i = 0; i < size(); i++) {
             String value = get(i);
             newStringColumn.append(value.substring(start));
         }
-
         return newStringColumn;
     }
 
-    default StringColumn substring(int start, int end){
+    /**
+     * Creates a new StringColumn with each string extracted between a start and end index.
+     */
+    default StringColumn substring(int start, int end) {
         StringColumn newStringColumn = StringColumn.create(getColumnName() + " [sub]");
-        for(int i = 0; i < size(); i++){
+        for (int i = 0; i < size(); i++) {
             String value = get(i);
             newStringColumn.append(value.substring(start, end));
         }
-
         return newStringColumn;
     }
 }

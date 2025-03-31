@@ -43,60 +43,33 @@
  *
  */
 
-package io.github.dug22.carpentry.io.json;
+package io.github.dug22.carpentry.io.csv;
 
-import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-public class JSONReaderBuilder {
+public class OptionalCSVHeaders {
 
-    private Path filePath;
-    private String urlString;
-    private JSONHeaders headers;
-    private List<String> rowKeys;
+    private final List<OptionalCSVHeader> headers;
 
-    public JSONReaderBuilder setFilePath(Path filePath) {
-        this.filePath = filePath;
-        return this;
-    }
-
-    public JSONReaderBuilder setURL(String urlString) {
-        this.urlString = urlString;
-        return this;
-    }
-
-    public JSONReaderBuilder setHeaders(JSONHeaders headers) {
+    private OptionalCSVHeaders(List<OptionalCSVHeader> headers) {
         this.headers = headers;
-        return this;
     }
 
-    public JSONReaderBuilder addJSONHeader(JSONHeader header){
-        if(header == null){
-            this.headers = JSONHeaders.of();
-        }
-
-        this.headers = this.headers.addJSONHeader(header);
-        return this;
+    public List<OptionalCSVHeader> getHeaders() {
+        return Collections.unmodifiableList(headers);
     }
 
-    public JSONReaderBuilder setRowKeys(List<String> rowKeys) {
-        this.rowKeys = rowKeys;
-        return this;
+    public static OptionalCSVHeaders of(OptionalCSVHeader... headers) {
+        List<OptionalCSVHeader> headerList = new ArrayList<>();
+        Collections.addAll(headerList, headers);
+        return new OptionalCSVHeaders(headerList);
     }
 
-    public JSONReader build() {
-        if (headers == null || headers.getHeaders().isEmpty()) {
-            throw new JSONException("Headers must be provided");
-        }
-
-        if (filePath != null) {
-            return JSONReader.fromFile(filePath, headers, rowKeys);
-        } else if (urlString != null) {
-            return JSONReader.fromURL(urlString, headers, rowKeys);
-        } else {
-            throw new JSONException("Either file path or URL must be provided!");
-        }
+    public OptionalCSVHeaders addCSVHeader(OptionalCSVHeader header) {
+        List<OptionalCSVHeader> newHeaders = new ArrayList<>(this.headers);
+        newHeaders.add(header);
+        return new OptionalCSVHeaders(newHeaders);
     }
 }
-
-

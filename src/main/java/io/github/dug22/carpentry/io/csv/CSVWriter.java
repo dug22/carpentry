@@ -58,7 +58,7 @@ public class CSVWriter extends SourceWriter {
 
     private final ColumnMap columnMap;
     private final String filePath;
-    private String delimiter = ",";
+    private final String delimiter;
     private final Set<String> columnNames;
 
     public CSVWriter(ColumnMap columnMap, String filePath, String delimiter) {
@@ -78,7 +78,7 @@ public class CSVWriter extends SourceWriter {
 
     @Override
     public void write() {
-        if (endsWithExtension()) {
+        if (!endsWithExtension()) {
             throw new CSVException("The file path must end with '.csv'!");
         }
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
@@ -101,7 +101,7 @@ public class CSVWriter extends SourceWriter {
 
     @Override
     protected boolean endsWithExtension() {
-        return !filePath.toLowerCase().endsWith(".csv");
+        return filePath.toLowerCase().endsWith(".csv");
     }
 
     private String formatCsvValue(Object value) {

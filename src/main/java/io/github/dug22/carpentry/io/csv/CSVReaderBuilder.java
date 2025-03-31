@@ -51,8 +51,9 @@ public class CSVReaderBuilder {
 
     private Path filePath;
     private String urlString;
-    private CSVHeaders headers;
+    private OptionalCSVHeaders headers;
     private String delimiter = ",";
+    private boolean autoDetect;
 
     public CSVReaderBuilder setFilePath(Path filePath) {
         this.filePath = filePath;
@@ -64,14 +65,14 @@ public class CSVReaderBuilder {
         return this;
     }
 
-    public CSVReaderBuilder setHeaders(CSVHeaders headers) {
+    public CSVReaderBuilder setHeaders(OptionalCSVHeaders headers) {
         this.headers = headers;
         return this;
     }
 
-    public CSVReaderBuilder addCSVHeader(CSVHeader header) {
+    public CSVReaderBuilder addCSVHeader(OptionalCSVHeader header) {
         if (this.headers == null) {
-            this.headers = CSVHeaders.of();
+            this.headers = OptionalCSVHeaders.of();
         }
         this.headers = this.headers.addCSVHeader(header);
         return this;
@@ -82,18 +83,21 @@ public class CSVReaderBuilder {
         return this;
     }
 
+    private void autoDetect(){
+        this.autoDetect = true;
+    }
+
     public CSVReader build() {
-        if (headers == null || headers.getHeaders().isEmpty()) {
-            throw new CSVException("Headers must be provided");
+        if(headers == null || headers.getHeaders().isEmpty()){
+            autoDetect();
         }
 
         if (filePath != null) {
-            return CSVReader.fromFile(filePath, headers, delimiter);
+            return CSVReader.fromFile(filePath, headers, delimiter, autoDetect);
         } else if (urlString != null) {
-            return CSVReader.fromURL(urlString, headers, delimiter);
+            return CSVReader.fromURL(urlString, headers, delimiter, autoDetect);
         } else {
             throw new CSVException("Either file path or URL must be provided!");
         }
     }
 }
-

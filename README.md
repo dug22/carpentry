@@ -11,7 +11,7 @@ It supports tasks like loading, exporting, cleaning, transforming, filtering, an
 
 ### What does Carpentry offer?
 
-* Easily import data from local or remote CSV or JSON files.
+* Easily import data from local or remote CSV files.
 * Export data to CSV, or JSON files.
 * Add and remove columns or rows.
 * Easily organize, remove, categorize, filter, search, complete, adjust, and reshape data
@@ -28,7 +28,7 @@ You can use the dependency by copying this into your pom.xml file
  <dependency>
     <groupId>io.github.dug22</groupId>
     <artifactId>carpentry</artifactId>
-    <version>1.0.0</version>
+    <version>LATEST</version>
  </dependency>
 ~~~
 

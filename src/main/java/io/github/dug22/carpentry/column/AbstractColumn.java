@@ -83,8 +83,9 @@ public abstract class AbstractColumn<T> {
         return columnType;
     }
 
-    public void setColumnType(Class<T> columnType) {
-        this.columnType = columnType;
+    @SuppressWarnings("unchecked")
+    public void setColumnType(Class<?> columnType) {
+        this.columnType = (Class<T>) columnType;
     }
 
     public T[] getValues() {

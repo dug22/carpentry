@@ -72,10 +72,8 @@ import io.github.dug22.carpentry.filtering.FilterPredicate;
 import io.github.dug22.carpentry.filtering.FilterPredicateCondition;
 import io.github.dug22.carpentry.grouping.GroupByFunction;
 import io.github.dug22.carpentry.io.DataFrameExporter;
-import io.github.dug22.carpentry.io.csv.CSVHeaders;
+import io.github.dug22.carpentry.io.csv.OptionalCSVHeaders;
 import io.github.dug22.carpentry.io.csv.CSVReader;
-import io.github.dug22.carpentry.io.json.JSONHeaders;
-import io.github.dug22.carpentry.io.json.JSONReader;
 import io.github.dug22.carpentry.io.string.DataFramePrinter;
 import io.github.dug22.carpentry.query.QueryProcessor;
 import io.github.dug22.carpentry.rename.RenameFunction;
@@ -84,6 +82,7 @@ import io.github.dug22.carpentry.row.DataRow;
 import io.github.dug22.carpentry.row.DataRows;
 import io.github.dug22.carpentry.sorting.SortColumn;
 import io.github.dug22.carpentry.sorting.SortingFunction;
+
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -110,19 +109,35 @@ public class DefaultDataFrame implements DataFrame {
         return DataFrameFactory.create(columnMap);
     }
 
-    public static DefaultDataFrame load(Path filePath, CSVHeaders headers) {
+    public static DefaultDataFrame load(Path filePath) {
+        return DataFrameFactory.loadFromCSVFile(filePath);
+    }
+
+    public static DefaultDataFrame load(Path filePath, String delimiter) {
+        return DataFrameFactory.loadFromCSVFile(filePath, delimiter);
+    }
+
+    public static DefaultDataFrame load(Path filePath, OptionalCSVHeaders headers) {
         return DataFrameFactory.loadFromCSVFile(filePath, headers);
     }
 
-    public static DefaultDataFrame load(Path filePath, CSVHeaders headers, String delimiter) {
+    public static DefaultDataFrame load(Path filePath, OptionalCSVHeaders headers, String delimiter) {
         return DataFrameFactory.loadFromCSVFile(filePath, headers, delimiter);
     }
 
-    public static DefaultDataFrame load(String url, CSVHeaders headers) {
+    public static DefaultDataFrame load(String url) {
+        return DataFrameFactory.loadFromCSVUrl(url);
+    }
+
+    public static DefaultDataFrame load(String url, String delimiter) {
+        return DataFrameFactory.loadFromCSVUrl(url, delimiter);
+    }
+
+    public static DefaultDataFrame load(String url, OptionalCSVHeaders headers) {
         return DataFrameFactory.loadFromCSVUrl(url, headers);
     }
 
-    public static DefaultDataFrame load(String url, CSVHeaders headers, String delimiter) {
+    public static DefaultDataFrame load(String url, OptionalCSVHeaders headers, String delimiter) {
         return DataFrameFactory.loadFromCSVUrl(url, headers, delimiter);
     }
 
@@ -130,25 +145,6 @@ public class DefaultDataFrame implements DataFrame {
         return DataFrameFactory.loadFromCSVReader(reader);
     }
 
-    public static DefaultDataFrame load(Path filePath, JSONHeaders headers) {
-        return DataFrameFactory.loadFromJSONFile(filePath, headers);
-    }
-
-    public static DefaultDataFrame load(Path filePath, JSONHeaders headers, List<String> rowKeys){
-        return DataFrameFactory.loadFromJSONFile(filePath, headers, rowKeys);
-    }
-
-    public static DefaultDataFrame load(String url, JSONHeaders headers) {
-        return DataFrameFactory.loadFromJSONUrl(url, headers);
-    }
-
-    public static DefaultDataFrame load(String url, JSONHeaders headers, List<String> rowKeys){
-        return DataFrameFactory.loadFromJSONUrl(url, headers, rowKeys);
-    }
-
-    public static DefaultDataFrame load(JSONReader reader) {
-        return DataFrameFactory.loadFromJSONReader(reader);
-    }
 
     public void saveAsCsv(String filePath) {
         DataFrameExporter.toCsv(columnMap, filePath);

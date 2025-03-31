@@ -34,8 +34,8 @@ import io.github.dug22.carpentry.DefaultDataFrame;
 import io.github.dug22.carpentry.columns.DoubleColumn;
 import io.github.dug22.carpentry.columns.IntegerColumn;
 import io.github.dug22.carpentry.columns.StringColumn;
-import io.github.dug22.carpentry.io.csv.CSVHeader;
-import io.github.dug22.carpentry.io.csv.CSVHeaders;
+import io.github.dug22.carpentry.io.csv.OptionalCSVHeader;
+import io.github.dug22.carpentry.io.csv.OptionalCSVHeaders;
 import io.github.dug22.carpentry.io.csv.CSVReader;
 import io.github.dug22.carpentry.io.csv.CSVReaderBuilder;
 import org.junit.jupiter.api.BeforeEach;
@@ -48,15 +48,15 @@ public class DataFrameQueryTest {
     private DefaultDataFrame dataFrame;
     private final CSVReader csvReader = new CSVReaderBuilder()
             .setURL("https://raw.githubusercontent.com/dug22/datasets/refs/heads/main/palmer%20penguins.csv")
-            .setHeaders(CSVHeaders.of(
-                    new CSVHeader("species", String.class),
-                    new CSVHeader("island", String.class),
-                    new CSVHeader("bill_length_mm", Double.class),
-                    new CSVHeader("bill_depth_mm", Double.class),
-                    new CSVHeader("flipper_length_mm", Double.class),
-                    new CSVHeader("body_mass_g", Double.class),
-                    new CSVHeader("sex", String.class),
-                    new CSVHeader("year", Integer.class)
+            .setHeaders(OptionalCSVHeaders.of(
+                    new OptionalCSVHeader("species", String.class),
+                    new OptionalCSVHeader("island", String.class),
+                    new OptionalCSVHeader("bill_length_mm", Double.class),
+                    new OptionalCSVHeader("bill_depth_mm", Double.class),
+                    new OptionalCSVHeader("flipper_length_mm", Double.class),
+                    new OptionalCSVHeader("body_mass_g", Double.class),
+                    new OptionalCSVHeader("sex", String.class),
+                    new OptionalCSVHeader("year", Integer.class)
             )).build();
 
     @BeforeEach

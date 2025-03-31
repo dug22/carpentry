@@ -18,8 +18,6 @@ package io.github.dug22.carpentry.carpentry_test.example;
 import io.github.dug22.carpentry.DefaultDataFrame;
 import io.github.dug22.carpentry.grouping.aggregation.AggregationType;
 import io.github.dug22.carpentry.grouping.aggregation.Aggregations;
-import io.github.dug22.carpentry.io.csv.CSVHeader;
-import io.github.dug22.carpentry.io.csv.CSVHeaders;
 import io.github.dug22.carpentry.io.csv.CSVReader;
 import io.github.dug22.carpentry.io.csv.CSVReaderBuilder;
 
@@ -30,23 +28,7 @@ public class MiniTitanicExample extends AbstractExample {
         out("We must first create a CSVReader with the required dataset link to read and required CSV Headers");
         CSVReader reader = new CSVReaderBuilder()
                 .setURL("https://raw.githubusercontent.com/dug22/datasets/refs/heads/main/titanic.csv")
-                .setHeaders(
-                        CSVHeaders.of(
-                                new CSVHeader("PassengerId", String.class),
-                                new CSVHeader("Survived", Integer.class),
-                                new CSVHeader("Pclass", String.class),
-                                new CSVHeader("Name", String.class),
-                                new CSVHeader("Sex", String.class),
-                                new CSVHeader("Age", Double.class),
-                                new CSVHeader("SibSp", Integer.class),
-                                new CSVHeader("Parch", Integer.class),
-                                new CSVHeader("Ticket", String.class),
-                                new CSVHeader("Fare", Double.class),
-                                new CSVHeader("Cabin", String.class),
-                                new CSVHeader("Embarked", Character.class)
-                        )
-                ).build();
-
+                .build();
         DefaultDataFrame df = DefaultDataFrame.load(reader);
         out();
         out("Next we'll display this DataFrame's shape");
@@ -60,7 +42,7 @@ public class MiniTitanicExample extends AbstractExample {
         didSurviveDataFrame.head();
         out();
         out("Next, we'll group the data by sex and survival status, then aggregate the count of survivors based on their sex.");
-        DefaultDataFrame groupedDataFrame = didSurviveDataFrame.groupBy("Sex","Survived").aggregate(Aggregations.of("Sex", AggregationType.COUNT));
+        DefaultDataFrame groupedDataFrame = didSurviveDataFrame.groupBy("Sex", "Survived").aggregate(Aggregations.of("Sex", AggregationType.COUNT));
         groupedDataFrame.head();
         out("Next we'll save this DataFrame as a .csv file");
         groupedDataFrame.saveAsCsv("D:\\grouped_titanic_survivals.csv");

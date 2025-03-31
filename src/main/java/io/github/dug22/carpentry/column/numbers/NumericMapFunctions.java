@@ -105,8 +105,8 @@ public interface NumericMapFunctions<T extends Number> {
      * @param others the columns to subtract
      * @return a new column with the difference of values
      */
-    default NumberColumn minus(List<NumericColumn<T>> others){
-        return performOperation(others, (a, b) -> a-b, '-');
+    default NumberColumn minus(List<NumericColumn<T>> others) {
+        return performOperation(others, (a, b) -> a - b, '-');
     }
 
     /**
@@ -125,7 +125,7 @@ public interface NumericMapFunctions<T extends Number> {
      * @param others the columns to multiply
      * @return a new column with the product of values
      */
-    default NumberColumn times(List<NumericColumn<T>> others){
+    default NumberColumn times(List<NumericColumn<T>> others) {
         return performOperation(others, (a, b) -> a * b, '*');
     }
 
@@ -145,7 +145,7 @@ public interface NumericMapFunctions<T extends Number> {
      * @param others the columns to divide by
      * @return a new column with the quotient of values
      */
-    default NumberColumn divide(List<NumericColumn<T>> others){
+    default NumberColumn divide(List<NumericColumn<T>> others) {
         return performOperation(others, (a, b) -> a / b, '/');
     }
 
@@ -260,6 +260,14 @@ public interface NumericMapFunctions<T extends Number> {
         return NumberColumn.create(resultColumnName, resultValues);
     }
 
+    /**
+     * Helper method to perform an arithmetic operation between multiple numeric columns.
+     *
+     * @param others          the columns to perform the operations with
+     * @param operation       the arithmetic operation to apply (e.g., sum, subtraction, etc.)
+     * @param operationSymbol the symbol representing the operation (e.g., '+', '-', etc.)
+     * @return a new column with the result of applying the operation between the two columns
+     */
     private NumberColumn performOperation(List<NumericColumn<T>> others, BiFunction<Double, Double, Double> operation, char operationSymbol) {
         if (this.size() != others.getFirst().size()) {
             throw new IllegalArgumentException("Columns must have the same size.");

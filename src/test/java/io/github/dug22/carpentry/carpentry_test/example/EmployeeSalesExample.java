@@ -18,8 +18,6 @@ package io.github.dug22.carpentry.carpentry_test.example;
 import io.github.dug22.carpentry.DefaultDataFrame;
 import io.github.dug22.carpentry.columns.BooleanColumn;
 import io.github.dug22.carpentry.columns.DoubleColumn;
-import io.github.dug22.carpentry.io.csv.CSVHeader;
-import io.github.dug22.carpentry.io.csv.CSVHeaders;
 import io.github.dug22.carpentry.io.csv.CSVReader;
 import io.github.dug22.carpentry.io.csv.CSVReaderBuilder;
 
@@ -31,23 +29,7 @@ public class EmployeeSalesExample extends AbstractExample {
         out("We begin by creating a CSVReader to load the dataset from the provided URL and define the necessary headers.");
         CSVReader reader = new CSVReaderBuilder()
                 .setURL("https://raw.githubusercontent.com/dug22/datasets/refs/heads/main/employee%20sales.csv")
-                .setHeaders(
-                        CSVHeaders.of(
-                                new CSVHeader("Employee", String.class),
-                                new CSVHeader("January", Integer.class),
-                                new CSVHeader("February", Integer.class),
-                                new CSVHeader("March", Integer.class),
-                                new CSVHeader("April", Integer.class),
-                                new CSVHeader("May", Integer.class),
-                                new CSVHeader("June", Integer.class),
-                                new CSVHeader("July", Integer.class),
-                                new CSVHeader("August", Integer.class),
-                                new CSVHeader("September", Integer.class),
-                                new CSVHeader("October", Integer.class),
-                                new CSVHeader("November", Integer.class),
-                                new CSVHeader("December", Integer.class)
-                        )
-                ).build();
+                .build();
 
         DefaultDataFrame df = DefaultDataFrame.load(reader);
         out("Let's take a look at the shape of this DataFrame.");

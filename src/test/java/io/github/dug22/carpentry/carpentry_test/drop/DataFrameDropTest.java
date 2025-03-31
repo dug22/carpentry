@@ -32,34 +32,25 @@ package io.github.dug22.carpentry.carpentry_test.drop;
 
 import io.github.dug22.carpentry.DefaultDataFrame;
 import io.github.dug22.carpentry.drop.How;
-import io.github.dug22.carpentry.io.json.JSONHeader;
-import io.github.dug22.carpentry.io.json.JSONHeaders;
-import io.github.dug22.carpentry.io.json.JSONReader;
-import io.github.dug22.carpentry.io.json.JSONReaderBuilder;
+import io.github.dug22.carpentry.io.csv.CSVReader;
+import io.github.dug22.carpentry.io.csv.CSVReaderBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class DataFrameDropTest {
 
     private DefaultDataFrame dataFrame;
 
-    private final JSONReader jsonReader = new JSONReaderBuilder()
-            .setURL("https://raw.githubusercontent.com/dug22/datasets/refs/heads/main/employees.json")
-            .setHeaders(JSONHeaders.of(
-                    new JSONHeader("name", String.class),
-                    new JSONHeader("job_title", String.class),
-                    new JSONHeader("department", String.class),
-                    new JSONHeader("hire_date", String.class),
-                    new JSONHeader("salary", Integer.class),
-                    new JSONHeader("location", String.class)
-            ))
+    private final CSVReader csvReader = new CSVReaderBuilder()
+            .setURL("https://raw.githubusercontent.com/dug22/datasets/refs/heads/main/employees.csv")
             .build();
 
     @BeforeEach
     public void setUp() {
-        dataFrame = DefaultDataFrame.load(jsonReader);
+        dataFrame = DefaultDataFrame.load(csvReader);
     }
 
     @Test

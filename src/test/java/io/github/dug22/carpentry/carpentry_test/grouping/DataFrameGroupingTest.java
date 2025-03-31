@@ -35,8 +35,8 @@ import io.github.dug22.carpentry.columns.IntegerColumn;
 import io.github.dug22.carpentry.columns.StringColumn;
 import io.github.dug22.carpentry.grouping.aggregation.AggregationType;
 import io.github.dug22.carpentry.grouping.aggregation.Aggregations;
-import io.github.dug22.carpentry.io.csv.CSVHeader;
-import io.github.dug22.carpentry.io.csv.CSVHeaders;
+import io.github.dug22.carpentry.io.csv.OptionalCSVHeader;
+import io.github.dug22.carpentry.io.csv.OptionalCSVHeaders;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -49,15 +49,15 @@ public class DataFrameGroupingTest {
 
     private DefaultDataFrame dataFrame;
 
-    private final CSVHeaders headers = CSVHeaders.of(
-            new CSVHeader("species", String.class),
-            new CSVHeader("island", String.class),
-            new CSVHeader("bill_length_mm", Double.class),
-            new CSVHeader("bill_depth_mm", Double.class),
-            new CSVHeader("flipper_length_mm", Double.class),
-            new CSVHeader("body_mass_g", Double.class),
-            new CSVHeader("sex", String.class),
-            new CSVHeader("year", Integer.class)
+    private final OptionalCSVHeaders headers = OptionalCSVHeaders.of(
+            new OptionalCSVHeader("species", String.class),
+            new OptionalCSVHeader("island", String.class),
+            new OptionalCSVHeader("bill_length_mm", Double.class),
+            new OptionalCSVHeader("bill_depth_mm", Double.class),
+            new OptionalCSVHeader("flipper_length_mm", Double.class),
+            new OptionalCSVHeader("body_mass_g", Double.class),
+            new OptionalCSVHeader("sex", String.class),
+            new OptionalCSVHeader("year", Integer.class)
     );
 
     @BeforeEach

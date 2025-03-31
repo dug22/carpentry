@@ -31,8 +31,8 @@
 package io.github.dug22.carpentry.carpentry_test.sorting;
 
 import io.github.dug22.carpentry.DefaultDataFrame;
-import io.github.dug22.carpentry.io.csv.CSVHeader;
-import io.github.dug22.carpentry.io.csv.CSVHeaders;
+import io.github.dug22.carpentry.io.csv.OptionalCSVHeader;
+import io.github.dug22.carpentry.io.csv.OptionalCSVHeaders;
 import io.github.dug22.carpentry.io.csv.CSVReader;
 import io.github.dug22.carpentry.io.csv.CSVReaderBuilder;
 import io.github.dug22.carpentry.sorting.SortColumn;
@@ -46,16 +46,16 @@ public class DataFrameSortingTest {
 
     private final CSVReader reader = new CSVReaderBuilder()
             .setURL("https://raw.githubusercontent.com/dug22/datasets/refs/heads/main/abalone.csv")
-            .setHeaders(CSVHeaders.of(
-                    new CSVHeader("sex", String.class),
-                    new CSVHeader("length", Double.class),
-                    new CSVHeader("diameter", Double.class),
-                    new CSVHeader("height", Double.class),
-                    new CSVHeader("whole_weight", Double.class),
-                    new CSVHeader("shucked_weight", Double.class),
-                    new CSVHeader("viscera_weight", Double.class),
-                    new CSVHeader("shell_weight", Double.class),
-                    new CSVHeader("rings", Integer.class)
+            .setHeaders(OptionalCSVHeaders.of(
+                    new OptionalCSVHeader("sex", String.class),
+                    new OptionalCSVHeader("length", Double.class),
+                    new OptionalCSVHeader("diameter", Double.class),
+                    new OptionalCSVHeader("height", Double.class),
+                    new OptionalCSVHeader("whole_weight", Double.class),
+                    new OptionalCSVHeader("shucked_weight", Double.class),
+                    new OptionalCSVHeader("viscera_weight", Double.class),
+                    new OptionalCSVHeader("shell_weight", Double.class),
+                    new OptionalCSVHeader("rings", Integer.class)
             )).build();
 
     private DefaultDataFrame dataFrame;
