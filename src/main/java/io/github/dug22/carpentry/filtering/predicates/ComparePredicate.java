@@ -92,7 +92,7 @@ public class ComparePredicate {
     private <T extends Comparable<T>> int compare(DataRow row, T value) {
         T rowValue = (T) row.getRowData().get(columnName);
         if (rowValue == null) {
-            return -1; // Handle null values gracefully
+            return -1;
         }
         if(!(rowValue instanceof Number)) throw new IllegalArgumentException("Your row value must be a numeric type!");
         return rowValue.compareTo(value);

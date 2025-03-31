@@ -6,7 +6,7 @@
 
     <groupId>io.github.dug22</groupId>
     <artifactId>carpentry</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
 
     <build>
         <plugins>
@@ -24,7 +24,7 @@
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>3.11.2</version>
                 <configuration>
-                    <source>21</source>
+                    <release>21</release>
                     <detectOfflineLinks>false</detectOfflineLinks>
                     <failOnError>false</failOnError>
                     <quiet>true</quiet>

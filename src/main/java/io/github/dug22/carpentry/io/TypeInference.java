@@ -76,10 +76,7 @@
 package io.github.dug22.carpentry.io;
 
 import io.github.dug22.carpentry.column.AbstractColumn;
-import io.github.dug22.carpentry.columns.BooleanColumn;
-import io.github.dug22.carpentry.columns.DoubleColumn;
-import io.github.dug22.carpentry.columns.IntegerColumn;
-import io.github.dug22.carpentry.columns.StringColumn;
+import io.github.dug22.carpentry.columns.*;
 import io.github.dug22.carpentry.io.type.*;
 
 import java.util.List;
@@ -95,6 +92,7 @@ public class TypeInference {
             new ByteColumnType(),
             new StringColumnType()
     };
+
 
     /**
      * Parses a string into a typed object (Boolean, Double, Integer, or String).
@@ -112,10 +110,20 @@ public class TypeInference {
         }
         if (type == Boolean.class) {
             return Boolean.parseBoolean(value);
+        } else if (type == Character.class) {
+            return value.charAt(0);
         } else if (type == Double.class) {
             return Double.parseDouble(value);
+        } else if (type == Float.class) {
+            return Float.parseFloat(value);
         } else if (type == Integer.class) {
             return Integer.parseInt(value);
+        } else if (type == Long.class) {
+            return Long.parseLong(value);
+        } else if (type == Number.class) {
+            return Double.parseDouble(value);
+        } else if (type == Short.class) {
+            return Short.parseShort(value);
         } else {
             return value;
         }
@@ -130,9 +138,15 @@ public class TypeInference {
      * @return new column instance
      */
     public static AbstractColumn<?> createColumnInstance(String name, Class<?> type) {
-        if (type == Integer.class) return IntegerColumn.create(name);
-        if (type == Double.class) return DoubleColumn.create(name);
         if (type == Boolean.class) return BooleanColumn.create(name);
+        if (type == Byte.class) return ByteColumn.create(name);
+        if (type == CharacterColumn.class) return CharacterColumn.create(name);
+        if (type == Double.class) return DoubleColumn.create(name);
+        if (type == Float.class) return FloatColumn.create(name);
+        if (type == Integer.class) return IntegerColumn.create(name);
+        if (type == Long.class) return LongColumn.create(name);
+        if (type == NumberColumn.class) return NumberColumn.create(name);
+        if (type == ShortColumn.class) return ShortColumn.create(name);
         return StringColumn.create(name);
     }
 
