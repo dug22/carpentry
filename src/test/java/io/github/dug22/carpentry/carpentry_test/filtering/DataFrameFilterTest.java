@@ -130,13 +130,13 @@ public class DataFrameFilterTest {
     }
 
     @Test
-    public void eitherTest(){
+    public void eitherTest() {
         DefaultDataFrame result = dataFrame.filter(either(dataFrame.column("DOB").isInMonth(Month.MARCH), dataFrame.column("DOB").isInMonth(Month.APRIL)));
         assertEquals(3, result.getRowCount());
     }
 
     @Test
-    public void bothTest(){
+    public void bothTest() {
         DefaultDataFrame result = dataFrame.filter(both(dataFrame.column("Name").startsWith("A"), dataFrame.column("DOB").isInMonth(Month.APRIL)));
         assertEquals(1, result.getRowCount());
     }

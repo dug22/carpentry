@@ -27,8 +27,9 @@ import io.github.dug22.carpentry.filtering.FilterPredicate;
 import io.github.dug22.carpentry.filtering.FilterPredicateCondition;
 import io.github.dug22.carpentry.grouping.GroupByFunction;
 import io.github.dug22.carpentry.io.DataFrameExporter;
-import io.github.dug22.carpentry.io.csv.OptionalCSVHeaders;
+import io.github.dug22.carpentry.io.TypeInference;
 import io.github.dug22.carpentry.io.csv.CSVReader;
+import io.github.dug22.carpentry.io.csv.OptionalCSVHeaders;
 import io.github.dug22.carpentry.io.string.DataFramePrinter;
 import io.github.dug22.carpentry.query.QueryProcessor;
 import io.github.dug22.carpentry.rename.RenameFunction;
@@ -253,14 +254,6 @@ public class DefaultDataFrame implements DataFrame {
     }
 
     @Override
-    public DefaultDataFrame addRows(Object[]... dataRows) {
-        for (Object[] row : dataRows) {
-            addRow(row);
-        }
-        return this;
-    }
-
-    @Override
     @SuppressWarnings("unchecked")
     public DataFrame addRow(DataRow row) {
         for (AbstractColumn<?> column : columnMap.values()) {
@@ -272,6 +265,26 @@ public class DefaultDataFrame implements DataFrame {
                 typedColumn.append(value);
             }
         }
+        return this;
+    }
+
+    @Override
+    public DefaultDataFrame addRows(Object[][] dataRows) {
+        Object[] headerRow = dataRows[0];
+        for (Object object : headerRow) columnMap.put(String.valueOf(object), null);
+        for (int rowIndex = 1; rowIndex < dataRows.length; rowIndex++) {
+            Object[] rowValues = dataRows[rowIndex];
+            if (rowValues.length != headerRow.length)
+                throw new DataFrameException("Row " + rowIndex + " size does not match header row");
+            int columnIndex = 0;
+            for (String columnName : columnMap.keySet()) {
+                Object value = rowValues[columnIndex++];
+                AbstractColumn<?> column = columnMap.computeIfAbsent(columnName,
+                        k -> TypeInference.createColumnInstance(k, value.getClass()));
+                appendValueToColumn(column, value);
+            }
+        }
+
         return this;
     }
 

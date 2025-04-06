@@ -196,12 +196,11 @@ public interface DataFrame {
     DataFrame addRow(Object... values);
 
     /**
-     * Adds multiple rows to the DataFrame using the specified data.
-     *
-     * @param dataRows the rows of data to be added.
-     * @return the current state of the DataFrame 
+     * Allows you to add all data as a 2D Object Array
+     * @param dataRows a 2D Object array where each inner array represents a row of data
+     * @return the current state of the DataFrame with the new rows appended.
      */
-    DataFrame addRows(Object[]... dataRows);
+    DefaultDataFrame addRows(Object[][] dataRows);
 
     /**
      * Adds a row to the DataFrame using a DataRow object.
