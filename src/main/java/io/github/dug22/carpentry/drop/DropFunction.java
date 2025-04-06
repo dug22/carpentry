@@ -76,7 +76,7 @@ public class DropFunction {
     /**
      * Drop null rows from a given DataFrame.
      * @param how dictates how to drop null values.
-     *  HOW.ANY Drops a rows if any null values are present.
+     *  HOW.ANY Drops rows if any null values are present.
      *  HOW.ALL drops a row if all values are null.
      * @return a new DataFrame with the rows with null values removed
      */

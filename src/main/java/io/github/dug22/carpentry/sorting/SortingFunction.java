@@ -17,11 +17,11 @@ package io.github.dug22.carpentry.sorting;
 
 import io.github.dug22.carpentry.DefaultDataFrame;
 import io.github.dug22.carpentry.column.AbstractColumn;
-import io.github.dug22.carpentry.column.ColumnCreator;
 import io.github.dug22.carpentry.row.DataRow;
 import io.github.dug22.carpentry.row.DataRows;
 
-import java.util.List;
+import java.lang.reflect.Array;
+import java.util.Arrays;
 
 public class SortingFunction {
 
@@ -44,20 +44,29 @@ public class SortingFunction {
     private <T> DefaultDataFrame sort(SortColumn[] sortColumns, boolean isParallel) {
         DataRows dataRows = dataFrame.getRows();
         RowColumnComparator rowColumnComparator = new RowColumnComparator(sortColumns);
-        List<DataRow> sortedDataRows = isParallel ? dataRows.parallelStream()
-                .sorted(rowColumnComparator)
-                .toList() : dataRows.stream().sorted(rowColumnComparator).toList();
-        DefaultDataFrame sortedDataFrame = DefaultDataFrame.create();
-        for (AbstractColumn<?> column : dataFrame.getColumnMap().values()) {
-            AbstractColumn<T> sortedColumn = (AbstractColumn<T>) ColumnCreator.createNewColumnInstance(column);
-            for (DataRow row : sortedDataRows) {
-                T value = (T) row.getRowData().get(column.getColumnName());
-                sortedColumn.append(value);
-            }
-            sortedDataFrame.addColumn(sortedColumn);
+        if (isParallel) {
+            DataRow[] rowArray = dataRows.toArray(new DataRow[0]);
+            Arrays.parallelSort(rowArray, rowColumnComparator);
+            dataRows.clear();
+            dataRows.addAll(Arrays.asList(rowArray));
+        } else {
+            dataRows.sort(rowColumnComparator);
         }
 
-        return sortedDataFrame;
+        for (AbstractColumn<?> column : dataFrame.getColumnMap().values()) {
+            Object newValues = Array.newInstance(
+                    column.getColumnType(),
+                    dataRows.size()
+            );
+            for (int i = 0; i < dataRows.size(); i++) {
+                Object value = dataRows.get(i).getRowData().get(column.getColumnName());
+                java.lang.reflect.Array.set(newValues, i, value);
+            }
+
+            ((AbstractColumn<T>) column).setValues((T[]) newValues);
+        }
+
+        return dataFrame;
     }
 
     /**
