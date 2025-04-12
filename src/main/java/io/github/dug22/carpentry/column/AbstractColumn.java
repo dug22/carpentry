@@ -185,6 +185,7 @@ public abstract class AbstractColumn<T> {
         values[index] = value;
     }
 
+
     public boolean isNA(int index) {
         return values.length <= index || values[index] == null;
     }

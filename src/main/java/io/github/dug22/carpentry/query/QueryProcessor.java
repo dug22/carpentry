@@ -16,9 +16,11 @@
 package io.github.dug22.carpentry.query;
 
 import io.github.dug22.carpentry.DefaultDataFrame;
-import io.github.dug22.carpentry.row.DataRow;
+import io.github.dug22.carpentry.column.AbstractColumn;
+import io.github.dug22.carpentry.column.ColumnMap;
 import io.github.dug22.carpentry.row.DataRows;
 
+import java.lang.reflect.Array;
 import java.util.List;
 
 public class QueryProcessor {
@@ -35,15 +37,28 @@ public class QueryProcessor {
      * @param queryInput The query string to be executed.
      * @return The updated DataFrame after executing the query.
      */
+    @SuppressWarnings("unchecked")
     public DefaultDataFrame query(String queryInput) {
-        QueryTokenizer tokenizer = new QueryTokenizer(queryInput);
-        List<QueryToken> tokens = tokenizer.tokenize();
-        QueryParser parser = new QueryParser(dataFrame, tokens);
-        DataRows dataRows = parser.parse();
-        dataFrame.clearRows();
-        for (DataRow row : dataRows) {
-            dataFrame.addRow(row);
+        if (queryInput == null || queryInput.trim().isEmpty()) {
+            return dataFrame;
         }
+
+        List<QueryToken> tokens = new QueryTokenizer(queryInput).tokenize();
+        DataRows dataRows = new QueryParser(dataFrame, tokens).parse();
+        ColumnMap columnMap = dataFrame.getColumnMap();
+        int newSize = dataRows.size();
+        dataFrame.clearRows();
+        if (newSize > 0) {
+            for (AbstractColumn<?> column : columnMap.values()) {
+                Object[] newValues = (Object[]) Array.newInstance(column.getColumnType(), newSize);
+                String columnName = column.getColumnName();
+                for (int i = 0; i < newSize; i++) {
+                    newValues[i] = dataRows.get(i).getRowData().getOrDefault(columnName, null);
+                }
+                ((AbstractColumn<Object>) column).setValues(newValues);
+            }
+        }
+
         return dataFrame;
     }
 }

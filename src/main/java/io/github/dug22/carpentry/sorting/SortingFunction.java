@@ -60,7 +60,7 @@ public class SortingFunction {
             );
             for (int i = 0; i < dataRows.size(); i++) {
                 Object value = dataRows.get(i).getRowData().get(column.getColumnName());
-                java.lang.reflect.Array.set(newValues, i, value);
+                Array.set(newValues, i, value);
             }
 
             ((AbstractColumn<T>) column).setValues((T[]) newValues);

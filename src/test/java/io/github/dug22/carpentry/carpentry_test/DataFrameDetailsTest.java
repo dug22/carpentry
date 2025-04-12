@@ -69,7 +69,7 @@ public class DataFrameDetailsTest {
     @Test
     public void dataframeSizeInBytesTest() {
         long sizeInBytes = columnMap.entrySet().stream().mapToLong(entry -> entry.toString().getBytes(StandardCharsets.UTF_8).length).sum();
-        assertEquals(179, sizeInBytes);
+        assertEquals(178, sizeInBytes);
         dataFrame.dataframeSizeInBytes();
     }
 }

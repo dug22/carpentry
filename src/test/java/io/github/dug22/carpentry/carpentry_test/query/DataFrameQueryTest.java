@@ -31,11 +31,8 @@
 package io.github.dug22.carpentry.carpentry_test.query;
 
 import io.github.dug22.carpentry.DefaultDataFrame;
-import io.github.dug22.carpentry.columns.DoubleColumn;
 import io.github.dug22.carpentry.columns.IntegerColumn;
 import io.github.dug22.carpentry.columns.StringColumn;
-import io.github.dug22.carpentry.io.csv.OptionalCSVHeader;
-import io.github.dug22.carpentry.io.csv.OptionalCSVHeaders;
 import io.github.dug22.carpentry.io.csv.CSVReader;
 import io.github.dug22.carpentry.io.csv.CSVReaderBuilder;
 import org.junit.jupiter.api.BeforeEach;
@@ -48,16 +45,7 @@ public class DataFrameQueryTest {
     private DefaultDataFrame dataFrame;
     private final CSVReader csvReader = new CSVReaderBuilder()
             .setURL("https://raw.githubusercontent.com/dug22/datasets/refs/heads/main/palmer%20penguins.csv")
-            .setHeaders(OptionalCSVHeaders.of(
-                    new OptionalCSVHeader("species", String.class),
-                    new OptionalCSVHeader("island", String.class),
-                    new OptionalCSVHeader("bill_length_mm", Double.class),
-                    new OptionalCSVHeader("bill_depth_mm", Double.class),
-                    new OptionalCSVHeader("flipper_length_mm", Double.class),
-                    new OptionalCSVHeader("body_mass_g", Double.class),
-                    new OptionalCSVHeader("sex", String.class),
-                    new OptionalCSVHeader("year", Integer.class)
-            )).build();
+            .build();
 
     @BeforeEach
     public void setUp() {
@@ -103,10 +91,10 @@ public class DataFrameQueryTest {
      */
     @Test
     public void filterForAdelieWithBodyMassOver4050Test() {
-        DefaultDataFrame result = dataFrame.query("'species' == 'Adelie' AND 'body_mass_g' > '4050.0'");
+        DefaultDataFrame result = dataFrame.query("'species' == 'Adelie' AND 'body_mass_g' > '4050'");
         StringColumn speciesColumn = result.getStringColumn("species");
         assertTrue(speciesColumn.containsAll("Adelie"));
-        DoubleColumn bodyMassColumn = result.getDoubleColumn("body_mass_g");
+        IntegerColumn bodyMassColumn = result.getIntegerColumn("body_mass_g");
         for (int i = 0; i < bodyMassColumn.size(); i++) {
             assertTrue(bodyMassColumn.get(i) > 4050.0);
         }
@@ -117,10 +105,10 @@ public class DataFrameQueryTest {
      */
     @Test
     public void filterForAdelieWithBodyMassUnder4050Test() {
-        DefaultDataFrame result = dataFrame.query("'species' == 'Adelie' AND 'body_mass_g' < '4050.0'");
+        DefaultDataFrame result = dataFrame.query("'species' == 'Adelie' AND 'body_mass_g' < '4050'");
         StringColumn speciesColumn = result.getStringColumn("species");
         assertTrue(speciesColumn.containsAll("Adelie"));
-        DoubleColumn bodyMassColumn = result.getDoubleColumn("body_mass_g");
+        IntegerColumn bodyMassColumn = result.getIntegerColumn("body_mass_g");
         for (int i = 0; i < bodyMassColumn.size(); i++) {
             assertTrue(bodyMassColumn.get(i) < 4050.0);
         }

@@ -61,7 +61,7 @@ public class FillFunction {
     private <T> void fillNullColumn(AbstractColumn<T> column, Object fillValue) {
         for (int i = 0; i < column.size(); i++) {
             T currentValue = column.get(i);
-            if (currentValue == null) {
+            if (currentValue == null || currentValue.equals(Double.NaN) || currentValue.equals(Float.NaN)) {
                 if (fillValue != null && column.getColumnType().isAssignableFrom(fillValue.getClass())) {
                     T typedFillValue = (T) fillValue;
                     column.set(i, typedFillValue);

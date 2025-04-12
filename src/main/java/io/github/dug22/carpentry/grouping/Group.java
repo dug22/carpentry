@@ -15,31 +15,35 @@
 
 package io.github.dug22.carpentry.grouping;
 
+import io.github.dug22.carpentry.DataFrame;
+import io.github.dug22.carpentry.column.AbstractColumn;
 import io.github.dug22.carpentry.row.DataRow;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Group implements Comparable<Group> {
-
     private final Object[] key;
-    private final List<DataRow> rows;
+    private final List<Integer> rowIndices;
+    private final DataFrame dataFrame;
 
-    public Group(Object[] key) {
+    public Group(Object[] key, DataFrame dataFrame) {
         this.key = key;
-        this.rows = new ArrayList<>();
+        this.rowIndices = new ArrayList<>();
+        this.dataFrame = dataFrame;
+    }
+
+    public void addRowIndex(int rowIndex) {
+        rowIndices.add(rowIndex);
     }
 
     public List<Object> getValuesForColumn(String columnName) {
-        List<Object> values = new ArrayList<>();
-        for (DataRow row : rows) {
-            values.add(row.getRowData().get(columnName));
+        AbstractColumn<?> column = dataFrame.getColumn(columnName);
+        List<Object> values = new ArrayList<>(rowIndices.size());
+        for (int index : rowIndices) {
+            values.add(column.get(index));
         }
         return values;
-    }
-
-    public void addRow(DataRow row) {
-        rows.add(row);
     }
 
     public Object[] getKey() {
@@ -47,19 +51,26 @@ public class Group implements Comparable<Group> {
     }
 
     public List<DataRow> getRows() {
+        List<DataRow> rows = new ArrayList<>(rowIndices.size());
+        for (int index : rowIndices) {
+            DataRow row = new DataRow();
+            for (AbstractColumn<?> col : dataFrame.getColumnMap().values()) {
+                row.append(col.getColumnName(), col.get(index));
+            }
+            rows.add(row);
+        }
         return rows;
     }
 
     @Override
-    @SuppressWarnings("all")
+    @SuppressWarnings("unchecked")
     public int compareTo(Group other) {
-        for (int i = 0; i < this.key.length; i++) {
-            Comparable key1 = (Comparable) this.key[i];
-            Comparable key2 = (Comparable) other.key[i];
+        for (int i = 0; i < key.length; i++) {
+            Comparable<Object> key1 = (Comparable<Object>) key[i];
+            Comparable<Object> key2 = (Comparable<Object>) other.key[i];
             int comparison = key1.compareTo(key2);
             if (comparison != 0) return comparison;
         }
         return 0;
     }
 }
-

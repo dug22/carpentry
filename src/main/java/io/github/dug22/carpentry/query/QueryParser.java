@@ -19,11 +19,14 @@ import io.github.dug22.carpentry.DefaultDataFrame;
 import io.github.dug22.carpentry.column.AbstractColumn;
 import io.github.dug22.carpentry.query.operator.QueryComparisonOperator;
 import io.github.dug22.carpentry.query.operator.QueryLogicalOperator;
+import io.github.dug22.carpentry.row.DataRow;
 import io.github.dug22.carpentry.row.DataRows;
 
+import java.util.BitSet;
 import java.util.List;
 
 public class QueryParser {
+
     private final List<QueryToken> tokens;
     private int currentPos;
     private final DefaultDataFrame dataFrame;
@@ -112,14 +115,27 @@ public class QueryParser {
      * @return The DataRows that match the comparison.
      */
     private DataRows evaluateComparison(QueryToken column, QueryToken operator, QueryToken value) {
-        DataRows matchingRows = new DataRows();
-        AbstractColumn<?> dataColumn = dataFrame.getColumn(column.value().replace("'", ""));
-        Object valueToCompare = parseValue(value.value());
-        for (int i = 0; i < dataColumn.size(); i++) {
+        String columnName = column.value().replace("'", "");
+        AbstractColumn<?> dataColumn = dataFrame.getColumn(columnName);
+        Object valueToCompare = parseValue(value.value(), dataColumn.getColumnType());
+        int rowCount = dataColumn.size();
+        BitSet keepIndices = new BitSet(rowCount);
+
+        for (int i = 0; i < rowCount; i++) {
             if (isMatchingRow(dataColumn.get(i), operator.value(), valueToCompare)) {
-                matchingRows.add(dataFrame.getRows().get(i));
+                keepIndices.set(i);
             }
         }
+
+        DataRows matchingRows = new DataRows(dataFrame);
+        for (int i = keepIndices.nextSetBit(0); i >= 0; i = keepIndices.nextSetBit(i + 1)) {
+            DataRow row = new DataRow();
+            for (AbstractColumn<?> col : dataFrame.getColumnMap().values()) {
+                row.append(col.getColumnName(), col.get(i));
+            }
+            matchingRows.add(row);
+        }
+
         return matchingRows;
     }
 
@@ -133,6 +149,34 @@ public class QueryParser {
      */
     private boolean isMatchingRow(Object columnValue, String operatorValue, Object valueToCompare) {
         return QueryComparisonOperator.compare(columnValue, operatorValue, valueToCompare);
+    }
+
+
+    /**
+     * Parses the value of a token and returns the corresponding object.
+     *
+     * @param value The value to parse.
+     * @return The parsed value as an Object
+     */
+    private Object parseValue(String value, Class<?> columnType) {
+        if (value == null) {
+            return null;
+        }
+        if (value.equalsIgnoreCase("true") || value.equalsIgnoreCase("false")) {
+            return Boolean.parseBoolean(value);
+        }
+        try {
+            if (columnType == Integer.class) return Integer.parseInt(value);
+            if (columnType == Double.class) return Double.parseDouble(value);
+            if (columnType == Long.class) return Long.parseLong(value);
+            if (columnType == Float.class) return Float.parseFloat(value);
+            if (columnType == String.class) return value;
+            if (columnType == Boolean.class) return Boolean.parseBoolean(value);
+            if (columnType == Character.class && value.length() == 1) return value.charAt(0);
+            return value;
+        } catch (NumberFormatException e) {
+            return value;
+        }
     }
 
     /**
@@ -153,29 +197,6 @@ public class QueryParser {
     }
 
     /**
-     * Parses the value of a token and returns the corresponding object.
-     *
-     * @param value The value to parse.
-     * @return The parsed value as an Object (either Integer, Double, or String).
-     */
-    private Object parseValue(String value) {
-        if (value.equalsIgnoreCase("true") || value.equalsIgnoreCase("false")) {
-            return Boolean.parseBoolean(value);
-        }
-
-        if (value.length() == 1) {
-            return value.charAt(0);
-        }
-
-        try {
-            return value.contains(".") ? Double.parseDouble(value) : Integer.parseInt(value);
-        } catch (NumberFormatException ignored) {
-            return value;
-        }
-    }
-
-
-    /**
      * Checks if the current position has reached the end of the token list.
      *
      * @return true if the end of tokens is reached, otherwise false.
@@ -193,6 +214,7 @@ public class QueryParser {
     private boolean isNextToken(QueryTokenType type) {
         return !isEndOfTokens() && tokens.get(currentPos).type() == type;
     }
+
 
     /**
      * Consumes the current token and advances the position.

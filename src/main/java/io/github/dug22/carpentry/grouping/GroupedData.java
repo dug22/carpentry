@@ -16,14 +16,15 @@
 package io.github.dug22.carpentry.grouping;
 
 import io.github.dug22.carpentry.DataFrame;
-import io.github.dug22.carpentry.row.DataRow;
+import io.github.dug22.carpentry.column.AbstractColumn;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class GroupedData {
-
     private final List<Group> groups;
 
     public GroupedData(DataFrame dataFrame, String[] groupByColumns) {
@@ -32,44 +33,53 @@ public class GroupedData {
     }
 
     private void groupData(DataFrame dataFrame, String[] groupByColumns) {
-        for (DataRow row : dataFrame.getRows()) {
-            if (isRowInvalid(row, groupByColumns)) {
+        Map<KeyWrapper, Group> groupMap = new HashMap<>();
+        int rowCount = dataFrame.getRowCount();
+
+        for (int rowIndex = 0; rowIndex < rowCount; rowIndex++) {
+            Object[] key = new Object[groupByColumns.length];
+            boolean isValid = true;
+
+            for (int i = 0; i < groupByColumns.length; i++) {
+                AbstractColumn<?> column = dataFrame.getColumn(groupByColumns[i]);
+                key[i] = column.get(rowIndex);
+                if (key[i] == null) {
+                    isValid = false;
+                    break;
+                }
+            }
+
+            if (!isValid) {
                 continue;
             }
 
-            Object[] key = new Object[groupByColumns.length];
-            for (int i = 0; i < groupByColumns.length; i++) {
-                key[i] = row.getRowData().get(groupByColumns[i]);
-            }
-
-            Group group = findOrCreateGroup(key);
-            group.addRow(row);
+            KeyWrapper keyWrapper = new KeyWrapper(key);
+            Group group = groupMap.computeIfAbsent(keyWrapper, k -> {
+                Group newGroup = new Group(k.key, dataFrame);
+                groups.add(newGroup);
+                return newGroup;
+            });
+            group.addRowIndex(rowIndex);
         }
-    }
-
-
-    private boolean isRowInvalid(DataRow row, String[] groupByColumns) {
-        for (String column : groupByColumns) {
-            Object value = row.getRowData().get(column);
-            if (value == null) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private Group findOrCreateGroup(Object[] key) {
-        for (Group group : groups) {
-            if (Arrays.equals(group.getKey(), key)) {
-                return group;
-            }
-        }
-        Group newGroup = new Group(key);
-        groups.add(newGroup);
-        return newGroup;
     }
 
     public List<Group> getGroups() {
         return groups;
+    }
+
+    private record KeyWrapper(Object[] key) {
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            KeyWrapper that = (KeyWrapper) o;
+            return Arrays.equals(key, that.key);
+        }
+
+        @Override
+        public int hashCode() {
+            return Arrays.hashCode(key);
+        }
     }
 }

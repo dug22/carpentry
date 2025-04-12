@@ -17,8 +17,13 @@
 package io.github.dug22.carpentry.filtering;
 
 import io.github.dug22.carpentry.DefaultDataFrame;
+import io.github.dug22.carpentry.column.AbstractColumn;
+import io.github.dug22.carpentry.column.ColumnMap;
 import io.github.dug22.carpentry.row.DataRow;
-import io.github.dug22.carpentry.row.DataRows;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FilterFunction {
 
@@ -34,17 +39,32 @@ public class FilterFunction {
      * @param predicate the condition to test each row against
      * @return a new DataFrame containing only the rows that match the predicate
      */
-    public DefaultDataFrame filter(FilterPredicate predicate) {
-        DataRows dataRows = new DataRows();
-        for (DataRow dataRow : dataFrame.getRows()) {
-            if (predicate.test(dataRow)) {
-                dataRows.add(dataRow);
+    @SuppressWarnings("all")
+    public <T> DefaultDataFrame filter(FilterPredicate predicate) {
+        ColumnMap columnMap = dataFrame.getColumnMap();
+        int rowCount = columnMap.getRowCount();
+
+        List<Integer> keepIndices = new ArrayList<>();
+        for (int i = 0; i < rowCount; i++) {
+            DataRow row = new DataRow();
+            for (AbstractColumn<?> column : columnMap.values()) {
+                row.append(column.getColumnName(), column.get(i));
+            }
+            if (predicate.test(row)) {
+                keepIndices.add(i);
             }
         }
 
-        DefaultDataFrame filteredDataFrame = dataFrame.copy();
-        filteredDataFrame.clearRows();
-        dataRows.forEach(filteredDataFrame::addRow);
-        return filteredDataFrame;
+        for (AbstractColumn<?> column : columnMap.values()) {
+            T[] values = (T[]) column.getValues();
+            T[] newValues = (T[]) Array.newInstance(column.getColumnType(), keepIndices.size());
+            for (int i = 0; i < keepIndices.size(); i++) {
+                newValues[i] = values[keepIndices.get(i)];
+            }
+            AbstractColumn<T> typedColumn = (AbstractColumn<T>) column;
+            typedColumn.setValues(newValues);
+        }
+
+        return dataFrame;
     }
 }

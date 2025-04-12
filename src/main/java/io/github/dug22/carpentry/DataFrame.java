@@ -425,21 +425,6 @@ public interface DataFrame {
      */
     DataFrame filter(FilterPredicate condition);
 
-    /**
-     * Groups the DataFrame by specified columns.
-     *
-     * @param groupByColumns the columns to group by.
-     * @return a new DataFrame grouped by the specified columns.
-     */
-    DefaultDataFrame groupBy(List<String> groupByColumns);
-
-    /**
-     * Groups the DataFrame by specified columns without sorting.
-     *
-     * @param groupByColumns the columns to group by.
-     * @return a new DataFrame grouped by the specified columns.
-     */
-    DefaultDataFrame groupByUnsorted(List<String> groupByColumns);
 
     /**
      * Groups the DataFrame by specified columns and returns a GroupByFunction.

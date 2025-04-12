@@ -459,15 +459,6 @@ public class DefaultDataFrame implements DataFrame {
         return new FilterFunction(this).filter(condition);
     }
 
-    public DefaultDataFrame groupBy(List<String> groupByColumns) {
-        return new GroupByFunction(this, true, groupByColumns.toArray(new String[0])).groupOnly();
-    }
-
-    @Override
-    public DefaultDataFrame groupByUnsorted(List<String> groupByColumns) {
-        return new GroupByFunction(this, false, groupByColumns.toArray(new String[0])).groupOnly();
-    }
-
     @Override
     public GroupByFunction groupBy(String... groupByColumns) {
         return new GroupByFunction(this, true, groupByColumns);

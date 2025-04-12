@@ -16,20 +16,17 @@
 package io.github.dug22.carpentry.grouping;
 
 import io.github.dug22.carpentry.DefaultDataFrame;
+import io.github.dug22.carpentry.column.AbstractColumn;
 import io.github.dug22.carpentry.column.ColumnCreator;
 import io.github.dug22.carpentry.columns.NumberColumn;
 import io.github.dug22.carpentry.grouping.aggregation.AggregationRecord;
-import io.github.dug22.carpentry.row.DataRow;
-import io.github.dug22.carpentry.row.DataRows;
-import io.github.dug22.carpentry.sorting.RowColumnComparator;
-import io.github.dug22.carpentry.sorting.SortColumn;
 
-import java.util.Arrays;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
 public class GroupByFunction {
-
     private final DefaultDataFrame dataFrame;
     private final boolean sort;
     private final String[] groupByColumns;
@@ -37,44 +34,9 @@ public class GroupByFunction {
 
     public GroupByFunction(DefaultDataFrame dataFrame, boolean sort, String... groupByColumns) {
         this.dataFrame = dataFrame;
-        this.sort = sort;
         this.groupByColumns = groupByColumns;
+        this.sort = sort;
         this.groupedData = new GroupedData(dataFrame, groupByColumns);
-    }
-
-    /**
-     * Groups the data by specified columns without any aggregation.
-     * @return a new DataFrame with grouped rows.
-     */
-    public DefaultDataFrame groupOnly() {
-        DefaultDataFrame result = DefaultDataFrame.create();
-        for (String groupByColumn : groupByColumns) {
-            result.addColumn(ColumnCreator.createNewColumnInstance(dataFrame.getColumn(groupByColumn)));
-        }
-
-        List<String> originalColumns = dataFrame.getColumnNames();
-        for (String column : originalColumns) {
-            if (!Arrays.asList(groupByColumns).contains(column)) {
-                result.addColumn(ColumnCreator.createNewColumnInstance(dataFrame.getColumn(column)));
-            }
-        }
-
-        DataRows allRows = new DataRows(dataFrame, dataFrame.getRows());
-
-        if (sort) {
-
-            SortColumn[] sortColumns = Arrays.stream(groupByColumns)
-                    .map(column -> new SortColumn(column, SortColumn.Direction.ASCENDING))
-                    .toArray(SortColumn[]::new);
-
-            allRows.sort(new RowColumnComparator(sortColumns));
-        }
-
-        for (DataRow row : allRows) {
-            result.addRow(row);
-        }
-
-        return result;
     }
 
     /**
@@ -82,33 +44,55 @@ public class GroupByFunction {
      * @param aggregationRecords an array of aggregation operations to perform.
      * @return a new DataFrame with the grouped and aggregated data.
      */
+    @SuppressWarnings("unchecked")
     public DefaultDataFrame aggregate(AggregationRecord[] aggregationRecords) {
         DefaultDataFrame result = DefaultDataFrame.create();
+
         for (String column : groupByColumns) {
             result.addColumn(ColumnCreator.createNewColumnInstance(dataFrame.getColumn(column)));
         }
 
-        for (AggregationRecord aggregationRecord : aggregationRecords) {
-            String newColumnName = aggregationRecord.columnName() + "_" + aggregationRecord.type().getFunctionName();
+        List<String> aggColumnNames = new ArrayList<>();
+        for (AggregationRecord agg : aggregationRecords) {
+            String newColumnName = agg.columnName() + "_" + agg.type().getFunctionName();
             result.addColumn(NumberColumn.create(newColumnName));
+            aggColumnNames.add(newColumnName);
         }
 
-        if (sort) groupedData.getGroups().sort(Comparator.naturalOrder());
+        List<Group> groups = groupedData.getGroups();
+        int groupCount = groups.size();
+        if (sort && groupCount > 1) {
+            groups.sort(Comparator.naturalOrder());
+        }
 
-        for (Group group : groupedData.getGroups()) {
-            DataRow newRow = new DataRow();
+        for (AbstractColumn<?> column : result.getColumnMap().values()) {
+            Object[] values = (Object[]) Array.newInstance(column.getColumnType(), groupCount);
+            String columnName = column.getColumnName();
+            int rowIndex = 0;
+
+            int groupByIndex = -1;
             for (int i = 0; i < groupByColumns.length; i++) {
-                newRow.append(groupByColumns[i], group.getKey()[i]);
+                if (groupByColumns[i].equals(columnName)) {
+                    groupByIndex = i;
+                    break;
+                }
             }
 
-            for (AggregationRecord aggregationRecord : aggregationRecords) {
-                List<Object> columnValues = group.getValuesForColumn(aggregationRecord.columnName());
-                Object aggregatedValue = aggregationRecord.type().aggregate(columnValues);
-                String newColName = aggregationRecord.columnName() + "_" + aggregationRecord.type().getFunctionName();
-                newRow.append(newColName, aggregatedValue);
+            if (groupByIndex >= 0) {
+                for (Group group : groups) {
+                    values[rowIndex++] = group.getKey()[groupByIndex];
+                }
+            } else {
+                int aggIndex = aggColumnNames.indexOf(columnName);
+                if (aggIndex >= 0) {
+                    AggregationRecord agg = aggregationRecords[aggIndex];
+                    for (Group group : groups) {
+                        List<Object> columnValues = group.getValuesForColumn(agg.columnName());
+                        values[rowIndex++] = agg.type().aggregate(columnValues);
+                    }
+                }
             }
-
-            result.addRow(newRow);
+            ((AbstractColumn<Object>) column).setValues(values);
         }
 
         return result;
