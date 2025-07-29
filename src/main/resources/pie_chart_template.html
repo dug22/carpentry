@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{Web_Page_Title}</title>
+</head>
+<body>
+{STYLES}
+{FIGURE_TEMPLATE}
+</body>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const slices = Array.from(document.querySelectorAll('path[class^="pie-slice-"]'));
+        const legendItems = document.querySelectorAll('.figure-key-list li');
+
+        slices.forEach(slice => {
+            const originalColor = slice.getAttribute('fill');
+            slice.setAttribute('data-color', originalColor);
+        });
+
+        let activeIndex = null;
+
+        legendItems.forEach(item => {
+            item.style.cursor = 'pointer';
+            item.addEventListener('click', () => {
+                const index = parseInt(item.getAttribute('data-index'));
+
+                if (activeIndex === index) {
+                    slices.forEach(slice => {
+                        slice.setAttribute('fill', slice.getAttribute('data-color'));
+                    });
+                    activeIndex = null;
+                } else {
+                    slices.forEach((slice, i) => {
+                        if (i === index) {
+                            slice.setAttribute('fill', slice.getAttribute('data-color'));
+                        } else {
+                            slice.setAttribute('fill', '#cccccc'); // grey out
+                        }
+                    });
+                    activeIndex = index;
+                }
+            });
+        });
+    });
+</script>

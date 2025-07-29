@@ -1,0 +1,186 @@
+/*
+ *   Licensed under the Apache License, Version 2.0 (the "License");
+ *   you may not use this file except in compliance with the License.
+ *   You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
+ *
+ *
+ */
+
+package io.github.dug22.carpentry.chart.types.doughnut;
+
+import io.github.dug22.carpentry.chart.ChartProperties;
+import io.github.dug22.carpentry.chart.components.ColorComponent;
+import io.github.dug22.carpentry.chart.components.FontStyle;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class DoughnutChartProperties extends ChartProperties {
+
+    private final List<DoughnutSegment> doughnutSegments = new ArrayList<>();
+    private FontStyle fontStyle = new FontStyle("Arial, sans-serif", 16, ColorComponent.BLACK);
+    private double doughnutThickness = 3;
+    private double holeSize = 12.0;
+    private boolean showPercentages = true;
+    private boolean shadowEffect = false;
+    private double explode = 0;
+
+    public DoughnutChartProperties() {
+
+    }
+
+    @Override
+    public void setTitle(String title) {
+        super.setTitle(title);
+        
+    }
+
+    @Override
+    public void setCaption(String caption) {
+        super.setCaption(caption);
+        
+    }
+
+    @Override
+    public void setLegendTitle(String legendTitle) {
+        super.setLegendTitle(legendTitle);
+        
+    }
+
+    @Override
+    public void setLegendVisible(boolean legendVisible) {
+        super.setLegendVisible(legendVisible);
+        
+    }
+
+    @Override
+    public void setFontStyle(FontStyle fontStyle){
+        this.fontStyle = fontStyle;
+        
+    }
+
+    @Override
+    public void setBackgroundColor(ColorComponent backgroundColor) {
+        super.setBackgroundColor(backgroundColor);
+        
+    }
+
+    @Override
+    public void setFigureSize(double figureWidth, double figureHeight) {
+        super.setFigureSize(figureWidth, figureHeight);
+        
+    }
+
+    public void addSegment(String label, double value, ColorComponent color) {
+        this.doughnutSegments.add(new DoughnutSegment(label, value, color));
+        
+    }
+
+    public void setDoughnutThickness(double thickness) {
+        if (thickness <= 0) {
+            throw new IllegalArgumentException("Donut thickness must be greater than 0");
+        }
+        this.doughnutThickness = thickness;
+        
+    }
+
+    public void setHoleSize(double size) {
+        if (size <= 0 || size >= 13) {
+            throw new IllegalArgumentException("Hole size must be between 0 and 12");
+        }
+        this.holeSize = size;
+        
+    }
+
+    public void setShowPercentages(boolean show) {
+        this.showPercentages = show;
+        
+    }
+
+    public void setShadowEffect(boolean shadow) {
+        this.shadowEffect = shadow;
+        
+    }
+
+    public void setExplode(double explode) {
+        if (explode < 0) {
+            throw new IllegalArgumentException("Explode value must be non-negative");
+        }
+        if(explode > 1.5){
+            throw new IllegalArgumentException("Explode value cannot exceed a value over 1.5");
+        }
+        this.explode = explode;
+        
+    }
+
+    @Override
+    public String getTitle() {
+        return super.getTitle();
+    }
+
+    @Override
+    public String getCaption() {
+        return super.getCaption();
+    }
+
+    @Override
+    public String getLegendTitle() {
+        return super.getLegendTitle();
+    }
+
+    @Override
+    public boolean isLegendVisible() {
+        return super.isLegendVisible();
+    }
+
+    @Override
+    public ColorComponent getBackgroundColor() {
+        return super.getBackgroundColor();
+    }
+
+    @Override
+    public double getFigureWidth() {
+        return super.getFigureWidth();
+    }
+
+    @Override
+    public double getFigureHeight() {
+        return super.getFigureHeight();
+    }
+
+    public List<DoughnutSegment> getDoughnutSegments() {
+        return doughnutSegments;
+    }
+
+    public FontStyle getFontStyle() {
+        return fontStyle;
+    }
+
+    public double getDoughnutThickness() {
+        return doughnutThickness;
+    }
+
+    public double getHoleSize() {
+        return holeSize;
+    }
+
+    public boolean arePercentagesVisible() {
+        return showPercentages;
+    }
+
+    public boolean hasShadowEffect() {
+        return shadowEffect;
+    }
+
+    public double getExplode() {
+        return explode;
+    }
+}

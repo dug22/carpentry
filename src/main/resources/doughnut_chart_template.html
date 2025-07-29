@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{Web_Page_Title}</title>
+</head>
+<body>
+{STYLES}
+{FIGURE_TEMPLATE}
+</body>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const segments = Array.from(document.querySelectorAll('circle[class^="doughnut-segment-"]'));
+        const legendItems = document.querySelectorAll('.figure-key-list li');
+
+        segments.forEach(segment => {
+            const originalColor = segment.getAttribute('stroke');
+            segment.setAttribute('data-color', originalColor);
+        });
+
+        let activeIndex = null;
+
+        legendItems.forEach(item => {
+            item.style.cursor = 'pointer';
+            item.addEventListener('click', () => {
+                const index = parseInt(item.getAttribute('data-index'));
+
+                if (activeIndex === index) {
+                    segments.forEach(seg => {
+                        seg.setAttribute('stroke', seg.getAttribute('data-color'));
+                    });
+                    activeIndex = null;
+                } else {
+                    segments.forEach((seg, i) => {
+                        if (i === index) {
+                            seg.setAttribute('stroke', seg.getAttribute('data-color'));
+                        } else {
+                            seg.setAttribute('stroke', '#cccccc'); // grey out
+                        }
+                    });
+                    activeIndex = index;
+                }
+            });
+        });
+    });
+</script>
+
+</html>
