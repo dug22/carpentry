@@ -43,13 +43,20 @@ public class Nulls {
     }
 
     public static boolean isNull(Object value) {
-        return switch (value) {
-            case null -> true;
-            case Double d when d.isNaN() -> true;
-            case Float f when f.isNaN() -> true;
-            case String s -> NULL_VALUES.contains(s.trim()); // trim to normalize
-            default -> false;
-        };
+        if(value == null){
+            return true;
+        }
+
+        Class<?> clazz = value.getClass();
+        if(clazz == String.class){
+            return NULL_VALUES.contains(((String) value).trim());
+        }
+
+        Object defaultNull = DEFAULT_NULLS.get(clazz);
+        if (defaultNull != null) {
+            return value.equals(defaultNull);
+        }
+        return false;
     }
 
     @SuppressWarnings("unchecked")

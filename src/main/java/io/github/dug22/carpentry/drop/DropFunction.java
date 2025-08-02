@@ -206,25 +206,25 @@ public class DropFunction extends DataFrameFunction {
     }
 
 
-    /**
-     * Drop rows with nulls in specific columns
-     */
     public DataFrame dropNAByColumnNames() {
         DataRows originalDataRows = dataFrame.getRows();
-        DataRows keptDataRows = new DataRows(dataFrame);
-
+        DataRows keptDataRows = new DataRows();
+        List<String> validColumns = dataFrame.columnNames();
         for (DataRow row : originalDataRows) {
             boolean keep = true;
             Map<String, Object> rowMap = row.toMap();
             for (String columnName : columnNames) {
+                if (!validColumns.contains(columnName)) {
+                    continue;
+                }
                 Object value = rowMap.get(columnName);
-                if (Nulls.isNull(value)) {
+                if (isMissing(value)) {
                     keep = false;
                     break;
                 }
             }
             if (keep) {
-                keptDataRows.remove(row);
+                keptDataRows.add(row);
             }
         }
 

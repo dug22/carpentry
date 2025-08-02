@@ -15,11 +15,6 @@ public class DoubleColumnTest {
         doubleColumn = DoubleColumn.create("Doubles", new Double[]{20.2, 30.3, 20.2, 25.7});
     }
 
-    public static void main(String[] args) {
-        DoubleColumn doubleColumn = DoubleColumn.create("Numbers", new Double[]{1D,2D,3D,4D,5D,6D,7D,8D,9D,10D});
-        doubleColumn.show();
-    }
-
     @Test
     public void appendTest(){
         doubleColumn.append(2d);
