@@ -39,6 +39,15 @@ You can use the dependency by copying this into your pom.xml file
 - UserGuide: currently in the works
 - Test Examples: https://github.com/dug22/carpentry/tree/master/src/test
 
+### Datasets Used for Testing:
+Datasets from this [GitHub Repository](https://github.com/dug22/datasets/tree/main) were used for testing purposes. 
+* [Roller Coaster Accidents](https://ridesdatabase.org/saferparks/data/) - By RidesDatabase
+   * [Data Analysis Research](https://www.kaggle.com/datasets/stevenlasch/roller-coaster-accidents) - By Steven Lasch
+* [Meteorite Landings](https://data.nasa.gov/docs/legacy/meteorite_landings/Meteorite_Landings.csv) - By NASA
+* [Palmer Penguins](https://github.com/allisonhorst/palmerpenguins) - By Allison Horst & Alison Presmanes Hill
+* [The Titanic Dataset](https://www.kaggle.com/competitions/titanic)
+* [Abalone](https://archive.ics.uci.edu/ml/datasets/abalone) - By Sam Waugh from the Department of Computer Science at the University of Tasmania.
+* [Iris](https://en.wikipedia.org/wiki/Iris_flower_data_set) - By British statistician and biologist Ronald Fisher
 ### License
 carpentry is released under the [Apache 2.0 License](https://github.com/dug22/carpentry/blob/master/LICENSE)
 ```
