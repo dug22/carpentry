@@ -850,7 +850,7 @@ For this example, we'll use the vehicles-mini dataset to query vehicles that wer
     │ Jaguar XF 2.2 Litre Luxury        │ 2014 │ 1964999       │ 28000      │ Diesel    │ Dealer      │ Automatic    │ First Owner  │
     └───────────────────────────────────┴──────┴───────────────┴────────────┴───────────┴─────────────┴──────────────┴──────────────┘
     ```
-  Practice Problem: We have a customer who is interested in buying a vehicle whose selling price is less than $250,000, mileage that is less than 70,000, and a car names that starts with the letter C or H (Hint regex matching).
+  Practice Problem: We have a customer who is interested in buying a vehicle whose selling price is less than $250,000, mileage that is less than 70,000, and  car names that starts with the letter C or H (Hint regex matching).
 
 3. Query Pract Problem Answer:
 
@@ -883,8 +883,7 @@ For this example, we'll use the vehicles-mini dataset to query vehicles that wer
     ```
 
 ### Joining DataFrames
-Joining is a new dataframe function that was introduced in Carpentry v1.0.6. Joining allows you to join two dataframes together. This is very useful if you're working with
-two dataframes that have common traits. There are four types of joins in Carpentry:
+Joining is a new dataframe function that was introduced in Carpentry v1.0.6. Joining allows you to join two dataframes together. This is very useful if you're working with two dataframes that have common traits. There are four types of joins in Carpentry:
 
 * Inner
 * Outer
@@ -970,7 +969,7 @@ For non-matching rows from the right null values will be applied. To perform a l
 
 **Right Join**
 
-A right keeps all rows from the right dataframe and only the matching rows from the dataframe. Unmatched rows from the left DataFrame will be applied with a null value.
+A right join keeps all rows from the right dataframe and only the matching rows from the dataframe. Unmatched rows from the left DataFrame will be applied with a null value.
 To perform a right join with DataFrame 1 and DataFrame 2 we can do the following:
 
   ```
