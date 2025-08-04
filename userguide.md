@@ -1144,5 +1144,5 @@ be laid out as followed "latitude, longitude", otherwise this function will not 
 
     <img width="1126" height="1033" alt="image" src="https://i.imgur.com/poinYFc.png"/>
 
-Note: If you interact with any of the pinpoints, it'll display the given country along with with it's given geo location.
+Note: If you interact with any of the pinpoints, it'll display the given country along with it's given geo location.
 </div>
