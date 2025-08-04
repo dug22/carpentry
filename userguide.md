@@ -11,7 +11,7 @@
    * [Displaying Column Results](#displaying-column-results)
    * [Adding Data to a Column](#adding-data-to-a-column)
    * [Copying a Column](#copying-a-column)
-   * [Applying Functions to a Column](#apply-functions-to-a-column)
+   * [Applying Functions to a Column](#applying-functions-to-a-column)
    * [Filtering a Column](#filtering-a-column)
    * [Sorting a Column](#sorting-a-column)
    * [Other Common Column Methods](#other-common-column-methods)
@@ -21,8 +21,8 @@
    * [What is a DataFrame](#what-is-a-dataframe)
    * [Creating a DataFrame](#creating-a-dataframe)
    * [Displaying DataFrame Results](#displaying-dataframe-results)
-   * [Loading Data From CSV Files](#import-data-from-csv-files)
-   * [Saving a DataFrame As a CSV File](#export-data-to-csv-files)
+   * [Loading Data From CSV Files](#loading-data-from-csv-files)
+   * [Saving a DataFrame As a CSV File](#saving-a-dataframe-as-a-csv-file)
    * [Dropping Data From a DataFrame](#dropping-data-from-a-dataframe)
    * [Sorting Data Within a DataFrame](#sorting-data-within-a-dataframe)
    * [Filling Null Values In a DataFrame](#filling-null-values-in-a-dataframe)
@@ -41,12 +41,7 @@
 <div align= "justify">
 
 ## Overview
-While Java is a popular language, you do not hear about Java being used for
-Data Science related tasks. Carpentry simplifies data science tasks for Java developers with ease.
-Just like a carpenter shapes and transforms wood into useful material, Carpentry is a Java DataFrame library
-that lets you efficiently shape, transform, analyze, and visualize data simply.
-Carpentry supports tasks like loading, exporting, cleaning, transforming, filtering, visualizing, and
-summarizing data. This user guide will give you an in depth understanding of how Carpentry works.
+While Java is a popular language, you do not hear about Java being used forData Science related tasks. Carpentry simplifies data science tasks for Java developers with ease. Just like how a skilled carpenter shapes and transforms wood into useful products, Carpentry aims to help Java developers to shape and transform their data into meaningful insights. Carpentry is a Java DataFrame library that supports tasks like loading, exporting, cleaning, transforming, filtering, visualizing, and summarizing data.This user guide will give you an in depth understanding of how Carpentry works.
 
 ## Getting Started
 
@@ -988,4 +983,166 @@ To perform a right join with DataFrame 1 and DataFrame 2 we can do the following
 
 ## Visualizing Your Data
 
+Data visualization is very important because it helps people see, interact with, and better understand data. Carpentry 1.0.6 has introduced a way for developers to visualize data with an easy-to-use chart API.Carpentry generates charts using pure HTML and SVG, ensuring lightweight and responsive visualizations. Carpentry support 5 chart types:
+* Pie
+* Doughnut
+* Bar
+* Line 
+* World Map Visualizations 
+
+In this guide, we’ll explore how to create interactive charts using Carpentry.
+
+### Pie Charts
+
+Pie charts are primarily used to visually represent the proportions of different categories within a whole. In this example we'll visually represent
+the proportions of fruit we have.
+
+1. Creating Our DataFrame:
+   
+   ```
+    DataFrame dataFrame = DataFrame.create(
+            StringColumn.create("Fruit", new String[]{"Apples", "Bananas", "Oranges", "Cherries"}),
+            DoubleColumn.create("Amount", new Double[]{30.0, 40.0, 50.0, 50.0})
+    );
+   ```
+   
+2. Building Out Our Pie Chart:
+
+    ```
+     PieChartBuilder pieChart = PieChartBuilder.create(dataFrame) //refer to your dataframe
+                .setTitle("Fruit Breakdown") // Set the title of the chart
+                .setCategoryColumn("Fruit") //Set our category
+                .setValueColumns(List.of("Amount")) //set our values columns (can take multiple)
+                .setLegendTitle("Fruits") //Sets the legend title
+                .setLegendVisible(true) //Sets the legend to be visible
+                .setColors(List.of(ColorComponent.RED, ColorComponent.YELLOW, ColorComponent.ORANGE, ColorComponent.MAROON)) //Creates 4 color keys
+                .setOutputFile("pie_chart_test.html") //saves the chart as pie_chart_test.html
+                .build();
+
+     pieChart.display(); //Displays the given pie chart.
+     ```
+
+     <img width="1126" height="1033" alt="image" src="https://i.imgur.com/D6C1lq2.png" />
+ 
+### Doughnut Charts 
+
+Doughnut charts primary uses are similar to a pie chart, and are almost identical to a pie chart, but the center is cut out (hence the name doughnut). In this example we'll visually represent the proportions of fruit we have.
+
+
+1. Creating Our DataFrame:
+
+    ```
+    DataFrame dataFrame = DataFrame.create(
+              StringColumn.create("Fruit", new String[]{"Apples", "Bananas", "Oranges", "Cherries"}),
+              DoubleColumn.create("Amount", new Double[]{30.0, 40.0, 50.0, 50.0})
+      );
+    ```
+
+2. Building Out Our Doughnut Chart:
+
+    ```
+      DoughnutChartBuilder doughnutChart = DoughnutChartBuilder.create(dataFrame) //refer to your dataframe
+                .setTitle("Fruit Breakdown") //sets the title of the chart 
+                .setCategoryColumn("Fruit") //set our category
+                .setValueColumns(List.of("Amount")) //set our values columns (can take multiple)
+                .setLegendTitle("Fruits") //Sets the legend title
+                .setLegendVisible(true)  //Sets the legend to be visible
+                .setDoughnutThickness(4) //sets the doughnut thickness 
+                .setColors(List.of(ColorComponent.RED, ColorComponent.YELLOW, ColorComponent.ORANGE, ColorComponent.MAROON))  //Creates 4 color keys
+                .setOutputFile("doughnut_chart_test.html") //saves the chart as doughnut_chart_test.html
+                .build();
+      doughnutChart.display(); //Displays the given doughnut chart.
+    ```
+
+    <img width="1126" height="1033" alt="image" src="https://i.imgur.com/loJlwf2.png" />
+
+### Bar Charts
+
+A bar chart is used when you want to show a distribution of data points or perform a comparison of metric values across different subgroups of your data. For this example, we will create a bar chart that showcases the mass and volume of each planet, allowing for an easy visual comparison between them. 
+
+1. Creating Our DataFrame:
+
+    ```
+    DataFrame dataFrame = DataFrame.read().csv("https://raw.githubusercontent.com/dug22/datasets/refs/heads/main/planets.csv");
+    ```
+
+2. Building Out Our Bar Chart:
+
+    ```
+      BarChartBuilder barChart = BarChartBuilder.create(dataFrame)
+                .setTitle("Planet Mass (kg) and Volume (km³) Comparison") //sets the title of the chart 
+                .setXData("Planet") //Sets data for the X Axis
+                .setYData(List.of("Mass (kg)", "Volume (km³)")) //Sets data for the Y axis
+                .setColors(List.of(ColorComponent.BLUE, ColorComponent.TURQUOISE)) //Sets the colors for the bars
+                .setBackgroundColor(ColorComponent.WHITE) //sets the background color of the chart
+                .setXAxisLabel("Planets") //sets the x axis label
+                .setYAxisLabel("Planet Mass (kg) and Volume(km³)") //sets the y axis label
+                .setLegendTitle("Mass (kg) and Volume(km³)") //sets the title of the legend
+                .setLegendVisible(true)  //Sets the legend to be visible
+                .setFigureSize(750D, 600D) //sets the figure size 
+                .setGridLines(true) //if true gridlines will be displayed
+                .setOutputFile("bar_chart_test.html") //saves the chart as bar_chart_test.html
+                .build();
+    barChart.display(); //Displays the given bar chart.
+    ```
+    <img width="1126" height="1033" alt="image" src="https://i.imgur.com/4NjGC15.png" />
+
+### Line Charts
+Line charts are primarily used to visualize the trend of data over a period of time or in relation to another variable. For this example, we'll compare the closing price and open price of APPL's stock over a period 5 years. 
+
+1. Creating Our DataFrame:
+
+    ```
+    DataFrame dataFrame = DataFrame.read().csv("https://raw.githubusercontent.com/dug22/datasets/refs/heads/main/aapl_stock_data.csv");
+    ```
+
+2. Building Out Our Line Chart:
+
+    ```
+      LineChartBuilder lineChart = LineChartBuilder.create(dataFrame)
+                .setTitle("AAPL Open vs Closed") //sets the title of our chart
+                .setXData("Date") //sets data for the X axis
+                .setXAxisLabel("Date") //sets the x axis label
+                .setYData(List.of("Open", "Close")) ////Sets data for the Y axis
+                .setYAxisLabel("APPL Open & Closed Prices") //sets the y axis label
+                .setBackgroundColor(ColorComponent.WHITE)  //sets the background color of the chart
+                .setColors(List.of(ColorComponent.GREEN, ColorComponent.RED)) //Sets the colors for the lines
+                .setLegendTitle("AAPL Stock Prices Legend") //sets the legend title
+                .setLegendVisible(true) //Sets the legend to be visible
+                .setGridLines(true) //if true gridlines will be displayed
+                .setFontStyle(new FontStyle("Arial", 14, ColorComponent.BLACK)) //sets the font style for the chart. This applies to titles, labels, etc.
+                .setFigureSize(750D, 600D) //sets the figure size 
+                .setOutputFile("line_chart_test.html") //saves the chart as line_chart_test.html
+                .build();
+      lineChart.display(); //Displays the given line chart.
+    ```
+    <img width="1126" height="1033" alt="image" src="https://i.imgur.com/bx8HJUy.png" />
+    
+### Map Visualizations
+Map visualizations are useful for displaying latitude and longitude coordinates. Carpentry uses world map image templates to render maps. Coordinate data must
+be laid out as followed "latitude, longitude", otherwise this function will not work. For this example, we will plot countries locations based on their latitude and longitude.
+
+1. Creating Our DataFrame:
+
+    ```
+    DataFrame dataFrame = DataFrame.read().csv("https://raw.githubusercontent.com/dug22/datasets/refs/heads/main/country_locations.csv");
+    ```
+
+3. Building Out Our Map Visual
+
+    ```
+     MapVisualBuilder countryLocations = MapVisualBuilder.create(dataFrame)
+                .setPlotPointsPrefix("Country") //adds the prefix of the country before the given geo points
+                .plotPoints("LatLong") //In order to plot lat and lon cords they must look like this "lat,lon"
+                .setTitle("Country Locations") //Sets the title of the map visual
+                .setOutputFile("countries.html") ) //saves the map visual as countries.html
+                .build();
+    countryLocations.display(); //Displays the given map visual.
+
+     //If you want to choose a world map template you can do  .setWorldMapTemplate(WorldMapTemplate.DELTA_BLUE_WORLD_MAP); by default it is set to DEFAULT_WORLD_MAP.
+    ```   
+
+    <img width="1126" height="1033" alt="image" src="https://i.imgur.com/poinYFc.png"/>
+
+Note: If you interact with any of the pinpoints, it'll display the given country along with with it's given geo location.
 </div>
