@@ -12,7 +12,6 @@ public class DataFrameFillTest {
 
     @Test
     public void fillNATest() {
-        dataFrame.show();
         dataFrame = dataFrame.fillNa(new FillColumnValuePair[]{
                 new FillColumnValuePair("bill_length_mm", -1.0),
                 new FillColumnValuePair("bill_depth_mm", -1.0),
@@ -20,6 +19,7 @@ public class DataFrameFillTest {
                 new FillColumnValuePair("body_mass_g", -1),
                 new FillColumnValuePair("sex", "Not specified")
         });
+        dataFrame.head();
 
         assertAll(
                 () -> assertFalse(dataFrame.getColumn("bill_length_mm").contains(null)),
@@ -27,6 +27,6 @@ public class DataFrameFillTest {
                 () -> assertFalse(dataFrame.getColumn("flipper_length_mm").contains(null)),
                 () -> assertFalse(dataFrame.getColumn("body_mass_g").contains(null)),
                 () -> assertFalse(dataFrame.stringColumn("sex").contains("NA")
-        ));
+                ));
     }
 }

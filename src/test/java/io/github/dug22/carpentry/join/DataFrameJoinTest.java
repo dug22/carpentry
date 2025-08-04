@@ -23,7 +23,7 @@ public class DataFrameJoinTest {
                 StringColumn.create("Name", new String[]{"Bob", "John", "Andrew"})
         );
 
-        dataFrameTwo = DataFrame.create(
+         dataFrameTwo = DataFrame.create(
                 IntegerColumn.create("ID", new Integer[]{1, 2, 4}),
                 IntegerColumn.create("Age", new Integer[]{25, 30, 22})
         );
@@ -33,7 +33,6 @@ public class DataFrameJoinTest {
     @Test
     public void innerJoinTest() {
         DataFrame innerJoin = dataFrameOne.join(dataFrameTwo, JoinType.INNER, "ID", "ID");
-
         // Expected output equivalent to:
         // ┌────┬────────┬─────┐
         // │ ID │ Name   │ Age │
@@ -52,7 +51,6 @@ public class DataFrameJoinTest {
     @Test
     public void leftJoinTest() {
         DataFrame leftJoin = dataFrameOne.join(dataFrameTwo, JoinType.LEFT, "ID", "ID", "_left", "_right");
-        //leftJoin.show();
         // Expected output equivalent to:
         // ┌────┬───────────┬───────────┐
         // │ ID │ Name_left │ Age_right │
@@ -73,7 +71,7 @@ public class DataFrameJoinTest {
 
     @Test
     public void rightJoinTest() {
-        DataFrame rightJoin = dataFrameOne.join(dataFrameTwo, JoinType.RIGHT, new JoinColumn[]{new JoinColumn("ID", "ID")});
+        DataFrame rightJoin = dataFrameOne.join(dataFrameTwo, JoinType.RIGHT, "ID", "ID");
         //rightJoin.show();
         // Expected output equivalent to:
         // ┌────┬────────┬─────┐
@@ -95,7 +93,7 @@ public class DataFrameJoinTest {
 
     @Test
     public void outerJoinTest() {
-        DataFrame outerJoin = dataFrameOne.join(dataFrameTwo, JoinType.OUTER, new JoinColumn[]{new JoinColumn("ID", "ID")});
+        DataFrame outerJoin = dataFrameOne.join(dataFrameTwo, JoinType.OUTER, "ID", "ID");
         // Expected output equivalent to:
         // ┌────┬────────┬─────┐
         // │ ID │ Name   │ Age │

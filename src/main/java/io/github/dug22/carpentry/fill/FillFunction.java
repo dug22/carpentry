@@ -29,14 +29,17 @@ import java.util.stream.IntStream;
  */
 public class FillFunction extends DataFrameFunction {
 
-    /** Column-value pairs to fill nulls */
+    /**
+     * Column-value pairs to fill nulls
+     */
     private final FillColumnValuePair[] fillColumnValuePairs;
 
     private final DataFrame dataFrame = getDataFrame();
 
     /**
      * Constructor
-     * @param dataFrame The DataFrame to operate on
+     *
+     * @param dataFrame            The DataFrame to operate on
      * @param fillColumnValuePairs Column-value mappings for filling
      */
     public FillFunction(DataFrame dataFrame, FillColumnValuePair[] fillColumnValuePairs) {
@@ -65,7 +68,7 @@ public class FillFunction extends DataFrameFunction {
                     Class<?> columnTypeClazz = columnType.getClassType();
                     Class<?> dataValueClazzType = dataValue.getClass();
 
-                    if (Nulls.isNull(String.valueOf(currentValue)) && columnTypeClazz.isAssignableFrom(dataValueClazzType)) {
+                    if (Nulls.isNull(currentValue) && columnTypeClazz.isAssignableFrom(dataValueClazzType)) {
                         T typedFilledValue = (T) dataValue;
                         column.set(index, typedFilledValue);
                     }

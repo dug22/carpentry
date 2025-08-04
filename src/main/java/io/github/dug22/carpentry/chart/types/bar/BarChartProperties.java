@@ -35,7 +35,7 @@ public class BarChartProperties extends ChartProperties {
     private boolean gridLines = true;
     private List<ColorComponent> colorComponents = List.of(ColorComponent.BLUE, ColorComponent.RED, ColorComponent.GREEN);
     private int maxXLabelAmount = 15;
-    private int maxXLabelCharLength = 6;
+    private int maxXLabelCharLength = 10;
 
     public BarChartProperties() {
     }
