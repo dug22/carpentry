@@ -36,7 +36,7 @@ You can use the dependency by copying this into your pom.xml file
 
 ### Documentation:
 - API Documentation: https://www.javadoc.io/doc/io.github.dug22/carpentry/latest/index.html
-- UserGuide: https://github.com/dug22/carpentry/blob/master/userguide.md
+- UserGuide: https://github.com/dug22/carpentry/blob/master/Carpentry%20User%20Guide.md
 - Test Examples: https://github.com/dug22/carpentry/tree/master/src/test
 
 ### Datasets Used for Testing:
