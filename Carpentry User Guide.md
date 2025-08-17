@@ -1146,3 +1146,5 @@ be laid out as followed "latitude, longitude", otherwise this function will not 
 
 Note: If you interact with any of the pinpoints, it'll display the given country along with it's given geo location.
 </div>
+
+If you have any questions, suggestions, etc., please don't hesitate to create an issue.
