@@ -50,7 +50,7 @@ Datasets from this [GitHub Repository](https://github.com/dug22/datasets/tree/ma
 * [Iris](https://en.wikipedia.org/wiki/Iris_flower_data_set) - By British statistician and biologist Ronald Fisher
 
 ### Integrations
-- You might incorporate Caprentry with many machine learning libraries. Carpentry is integrated with [Yet Another Small Machine Learning Library (YASMLL)](https://github.com/dug22/YASMLL) for simple dataset loading and defining features and labels necessary for model training.
+- You might incorporate Caprentry with many machine learning libraries. Carpentry is integrated with [Tenoner](https://github.com/dug22/Tenoner) for simple dataset loading and defining features and labels necessary for model training.
 
 ### License
 carpentry is released under the [Apache 2.0 License](https://github.com/dug22/carpentry/blob/master/LICENSE)
